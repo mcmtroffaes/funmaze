@@ -1,0 +1,48 @@
+[project]
+name = "funmaze"
+version = "0.0.1"
+description = "A functional programming interface for generating and solving mazes."
+readme = "README.rst"
+requires-python = ">=3.9"
+license = { file = "LICENSE.rst" }
+keywords = ["maze", "labyrinth", "puzzle", "functional"]
+authors = [
+  {email = "matthias.troffaes@gmail.com"},
+  {name = "Matthias C. M. Troffaes"}
+]
+classifiers = [
+    'Development Status :: 1 - Alpha',
+    'Environment :: Console',
+    'Intended Audience :: Developers',
+    'Intended Audience :: End Users/Desktop',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Topic :: Scientific/Engineering :: Mathematics',
+    'Topic :: Games/Entertainment :: Puzzle Games',
+ ]
+dependencies = [
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "coverage",
+  "mypy",
+  "types-setuptools"
+]
+
+[project.urls]
+homepage = "https://github.com/mcmtroffaes/funmaze"
+
+[project.scripts]
+funmaze = "funmaze:__main__"
+
+[project.entry-points."funmaze.generate"]
+[project.entry-points."funmaze.solve"]
+[project.entry-points."funmaze.transform"]
+[project.entry-points."funmaze.visualize"]
