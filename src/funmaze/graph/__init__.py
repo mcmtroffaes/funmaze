@@ -41,19 +41,21 @@ def graph_remove_nodes(graph: Graph, nodes: Set[Node]
                        ) -> Graph[Node]:
     """Remove a node from a graph.
 
-    :param EdgeTopology graph: Base graph.
-    :param Set[Cell] nodes: Set of nodes to be removed.
+    :param Graph graph: Base graph.
+    :param Set[Node] nodes: Set of nodes to be removed.
     """
     return {edge for edge in graph if all(node not in nodes for node in edge)}
 
 
 def graph_merge_nodes(graph: Graph, nodes: Set[Node], target: Node
                       ) -> Graph[Node]:
-    """Merge nodes into a new node.
+    """Remove and merge *nodes* into a *target* node.
+    The *target* can be contained in *nodes*, can be a completely
+    new node, or can be some other node in *graph*.
 
-    :param EdgeTopology graph: Base graph.
-    :param Cell nodes: Cell to remove.
-    :param Cell target: Target node.
+    :param Graph graph: Base graph.
+    :param Node nodes: Node to remove.
+    :param Node target: Target node.
     """
     def _update(edge: Edge[Node]) -> Edge[Node] | None:
         good_nodes = frozenset(edge) - nodes
