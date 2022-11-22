@@ -15,10 +15,10 @@ def grid_graph(size_x: int, size_y: int) -> Graph[GridNode]:
                     yield Edge([(x, y), (x + 1, y)])
                 if y < size_y - 1:
                     yield Edge([(x, y), (x, y + 1)])
-    return set(_edges())
+    return frozenset(_edges())
 
 
 def grid_rectangle(xs: Iterable[int], ys: Iterable[int]
                    ) -> Set[GridNode]:
     """Build rectangular set of nodes."""
-    return set((x, y) for x in xs for y in ys)
+    return frozenset((x, y) for x in xs for y in ys)

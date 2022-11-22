@@ -13,7 +13,7 @@ def graph_graphviz(
         fmt: str = 'pdf',
 ) -> graphviz.Graph:
     # note: default engine set to 'neato' to support node positions
-    if len(set(names.values())) != len(names.values()):
+    if len(frozenset(names.values())) != len(names.values()):
         raise ValueError("names must be unique")
     gv = graphviz.Graph(strict=True, engine=engine, format=fmt)
     if positions is not None:
