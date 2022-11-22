@@ -33,29 +33,21 @@ Graph = Set[Edge[Node]]
 
 
 def graph_nodes(graph: Graph[Node]) -> Set[Node]:
-    """Set of all nodes."""
+    """Set of all nodes of *graph*."""
     return frozenset(itertools.chain.from_iterable(graph))
 
 
 def graph_remove_nodes(graph: Graph, nodes: Set[Node]
                        ) -> Graph[Node]:
-    """Remove a node from a graph.
-
-    :param graph: Base graph.
-    :param nodes: Set of nodes to be removed.
-    """
+    """Remove *nodes* from *graph*."""
     return {edge for edge in graph if all(node not in nodes for node in edge)}
 
 
 def graph_merge_nodes(graph: Graph, nodes: Set[Node], target: Node
                       ) -> Graph[Node]:
-    """Remove and merge *nodes* into a *target* node.
+    """Remove and merge *nodes* from *graph* into a *target* node.
     The *target* can be contained in *nodes*, can be a completely
     new node, or can be some other node in *graph*.
-
-    :param graph: Base graph.
-    :param nodes: Nodes to remove.
-    :param target: Target node.
     """
     def _update(edge: Edge[Node]) -> Edge[Node] | None:
         good_nodes = frozenset(edge) - nodes

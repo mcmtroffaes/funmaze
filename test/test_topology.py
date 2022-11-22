@@ -45,13 +45,13 @@ def test_grid_graph():
 
 
 def test_grid_mask():
-    rec = grid_rectangle((2, 1), (4, 2))
+    rec = grid_rectangle(range(2, 5), range(1, 3))
     assert rec == {(2, 1), (3, 1), (4, 1), (2, 2), (3, 2), (4, 2)}
 
 
 def test_grid_graph_mask():
     grid = grid_graph(4, 4)
-    rec = grid_rectangle((1, 1), (3, 3))
+    rec = grid_rectangle(range(1, 4), range(1, 4))
     grid2 = graph_remove_nodes(grid, rec)
     # 00 01 02 03
     # 10 ** ** **
@@ -69,7 +69,7 @@ def test_grid_graph_mask():
 
 def test_graph_merge_nodes():
     grid = grid_graph(4, 4)
-    rec = grid_rectangle((1, 1), (3, 3))
+    rec = grid_rectangle(range(1, 4), range(1, 4))
     grid2 = graph_merge_nodes(grid, rec, (2, 2))
     # 00 01 02 03
     # 10 ** ** **
@@ -92,8 +92,8 @@ def test_graph_merge_nodes():
 
 
 def test_graphviz(tmp_path):
-    rec1 = grid_rectangle((1, 1), (3, 3))
-    rec2 = grid_rectangle((3, 3), (4, 4))
+    rec1 = grid_rectangle(range(1, 4), range(1, 4))
+    rec2 = grid_rectangle(range(3, 5), range(3, 5))
     top1 = grid_graph(7, 7)
     top2 = graph_merge_nodes(top1, rec1, (2, 2))
     top = graph_remove_nodes(top2, rec2)

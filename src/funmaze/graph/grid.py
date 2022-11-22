@@ -7,6 +7,7 @@ GridNode = tuple[int, int]
 
 
 def grid_graph(size_x: int, size_y: int) -> Graph[GridNode]:
+    """Build graph on a grid."""
     def _edges() -> Iterable[Edge[GridNode]]:
         for x in range(size_x):
             for y in range(size_y):
@@ -17,8 +18,7 @@ def grid_graph(size_x: int, size_y: int) -> Graph[GridNode]:
     return set(_edges())
 
 
-def grid_rectangle(top_left: GridNode, bottom_right: GridNode
+def grid_rectangle(xs: Iterable[int], ys: Iterable[int]
                    ) -> Set[GridNode]:
-    return set((x, y)
-               for x in range(top_left[0], bottom_right[0] + 1)
-               for y in range(top_left[1], bottom_right[1] + 1))
+    """Build rectangular set of nodes."""
+    return set((x, y) for x in xs for y in ys)
