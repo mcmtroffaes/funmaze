@@ -1,8 +1,11 @@
+from collections.abc import Set
+
 import pytest
 
 from funmaze.graph import graph_remove_nodes, Edge, \
-    graph_merge_nodes, graph_nodes
+    graph_merge_nodes, graph_nodes, Node
 from funmaze.graph.grid import grid_graph, grid_rectangle
+from funmaze.visualize.bitmap import graph_bitmap
 from funmaze.visualize.graphviz import graph_graphviz
 
 
@@ -100,12 +103,12 @@ def test_graphviz(tmp_path):
     nodes = graph_nodes(top)
     names = {node: f"{i}" for i, node in enumerate(sorted(nodes))}
     positions = {node: (node[1], -node[0]) for node in nodes}
-    graph = graph_graphviz(top, names, positions)
-    assert '0 [pos="0,0!"]' in graph.source
-    assert '0 -- 1' in graph.source
-    graph2 = graph_graphviz(top, names)
-    assert '0 [pos="0,0!"]' not in graph2.source
-    assert '0 -- 1' in graph2.source
+    gv = graph_graphviz(top, names, positions)
+    assert '0 [pos="0,0!"]' in gv.source
+    assert '0 -- 1' in gv.source
+    gv2 = graph_graphviz(top, names)
+    assert '0 [pos="0,0!"]' not in gv2.source
+    assert '0 -- 1' in gv2.source
 
 
 def test_graphviz_2(tmp_path):
@@ -114,3 +117,19 @@ def test_graphviz_2(tmp_path):
     names = {node: "oops" for node in nodes}
     with pytest.raises(ValueError):  # names not unique
         graph_graphviz(top, names)
+
+
+def test_bitmap():
+    def _pos(node: tuple[int, int]):
+        return 1 + 2 * node[0], 1 + 2 * node[1]
+    rec1 = grid_rectangle(range(1, 4), range(1, 4))
+    rec2 = grid_rectangle(range(3, 5), range(3, 5))
+    top1 = grid_graph(7, 7)
+    top2 = graph_merge_nodes(top1, rec1, (2, 2))
+    top = graph_remove_nodes(top2, rec2)
+    nodes = graph_nodes(top)
+    positions: dict[Node, Set[Node]] = {node: {_pos(node)} for node in nodes}
+    positions[(2, 2)] = grid_rectangle(range(3, 8), range(3, 8))
+    bitmap = graph_bitmap(top, positions)
+    print(bitmap)
+    assert bitmap is None
