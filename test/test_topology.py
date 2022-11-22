@@ -101,7 +101,6 @@ def test_graphviz(tmp_path):
     names = {node: f"{i}" for i, node in enumerate(sorted(nodes))}
     positions = {node: (node[1], -node[0]) for node in nodes}
     graph = graph_graphviz(top, names, positions)
-    graph.render(tmp_path / "grid", view=True)
     assert '0 [pos="0,0!"]' in graph.source
     assert '0 -- 1' in graph.source
     graph2 = graph_graphviz(top, names)
