@@ -37,14 +37,14 @@ def graph_nodes(graph: Graph[Node]) -> Set[Node]:
     return frozenset(itertools.chain.from_iterable(graph))
 
 
-def graph_remove_nodes(graph: Graph, nodes: Set[Node]
-                       ) -> Graph[Node]:
+def graph_remove_nodes(graph: Graph, nodes: Set[Node]) -> Graph[Node]:
     """Remove *nodes* from *graph*."""
-    return {edge for edge in graph if all(node not in nodes for node in edge)}
+    return frozenset(
+        edge for edge in graph if all(node not in nodes for node in edge))
 
 
-def graph_merge_nodes(graph: Graph, nodes: Set[Node], target: Node
-                      ) -> Graph[Node]:
+def graph_merge_nodes(
+        graph: Graph, nodes: Set[Node], target: Node) -> Graph[Node]:
     """Remove and merge *nodes* from *graph* into a *target* node.
     The *target* can be contained in *nodes*, can be a completely
     new node, or can be some other node in *graph*.

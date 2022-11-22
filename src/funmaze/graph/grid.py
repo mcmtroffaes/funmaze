@@ -18,7 +18,6 @@ def grid_graph(size_x: int, size_y: int) -> Graph[GridNode]:
     return frozenset(_edges())
 
 
-def grid_rectangle(xs: Iterable[int], ys: Iterable[int]
-                   ) -> Set[GridNode]:
+def grid_rectangle(xs: Iterable[int], ys: Iterable[int]) -> Set[GridNode]:
     """Build rectangular set of nodes."""
     return frozenset((x, y) for x in xs for y in ys)
