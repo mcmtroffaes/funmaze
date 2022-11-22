@@ -1,3 +1,4 @@
+import itertools
 from collections.abc import Set
 from dataclasses import dataclass, InitVar, field
 from typing import TypeVar, Iterator, Iterable
@@ -33,10 +34,7 @@ Graph = Set[Edge[Node]]
 
 def graph_nodes(top: Graph[Node]) -> Set[Node]:
     """Set of all nodes."""
-    nodes: set[Node] = set()
-    for edge in top:
-        nodes.update(edge)
-    return nodes
+    return frozenset(itertools.chain.from_iterable(top))
 
 
 def graph_remove_nodes(graph: Graph, nodes: Set[Node]
