@@ -132,8 +132,8 @@ def test_bitmap() -> None:
     positions: dict[tuple[int, int], Set[tuple[int, int]]] = {
         node: {_pos(node)} for node in nodes}
     positions[(2, 2)] = grid_rectangle(range(3, 8), range(3, 8))
-    values = {node: i + 1 for i, node in enumerate(sorted(nodes))}
-    bitmap = graph_bitmap(top, positions, values, wall_color=-1, edge_color=0)
+    colors = {node: i + 1 for i, node in enumerate(sorted(nodes))}
+    bitmap = graph_bitmap(top, positions, colors, wall_color=-1, edge_color=0)
     assert bitmap.shape == (15, 15)
     assert (bitmap[:, 0] == np.full((15,), -1)).all()
     assert (bitmap[0, :] == np.full((15,), -1)).all()

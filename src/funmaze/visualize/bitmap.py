@@ -32,11 +32,11 @@ def graph_bitmap(
     size_y = 2 + max(
         pos[1] for pos_set in positions.values() for pos in pos_set)
     # set walls everywhere
-    arr = np.full((size_x, size_y), wall_color)
+    bitmap = np.full((size_x, size_y), wall_color)
     # insert nodes
     for node in graph_nodes(graph):
         for pos in positions[node]:
-            arr[pos] = node_colors[node]
+            bitmap[pos] = node_colors[node]
     # insert edges
     for edge in graph:
         pos_set1, pos_set2 = tuple(positions[node] for node in edge)
@@ -44,10 +44,10 @@ def graph_bitmap(
         edge_pos: tuple[int, int] | None = _connect(pos_set1, pos_set2)
         if edge_pos is None:
             raise ValueError(
-                f"cannot create edge between {val1} and {val2}\n{arr}")
-        if arr[edge_pos] != wall_color:
+                f"cannot create edge between {val1} and {val2}\n{bitmap}")
+        if bitmap[edge_pos] != wall_color:
             raise ValueError(
                 f"cannot create edge at {edge_pos} between {val1} and {val2}\n"
-                f"{arr}")
-        arr[edge_pos] = edge_color
-    return arr
+                f"{bitmap}")
+        bitmap[edge_pos] = edge_color
+    return bitmap
