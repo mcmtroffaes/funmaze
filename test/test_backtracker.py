@@ -69,6 +69,6 @@ def test_recursive_backtracker_empty():
 
 def test_recursive_backtracker_large():
     """Larger test to help profiling."""
-    grid = grid_sequential((20, 20))
+    grid = grid_sequential((30, 30))
     graph = neighbourhood_graph(grid)
     generate_backtracker(graph)
