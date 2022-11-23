@@ -1,5 +1,4 @@
 import itertools
-from collections.abc import Mapping, Set
 from typing import Iterable
 
 import numpy as np

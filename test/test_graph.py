@@ -144,7 +144,7 @@ def test_bitmap_1() -> None:
 
 def test_bitmap_2() -> None:
     grid = grid_sequential((3, 3))
-    graph: Graph[np.uint] = {Edge([0, 2])}  # not neighbours
+    graph: Graph[np.uint] = {Edge([np.uint(0), np.uint(2)])}  # not neighbours
     with pytest.raises(ValueError, match="not neighbours"):
         render_bitmap(grid, graph)
 
