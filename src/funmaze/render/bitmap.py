@@ -9,7 +9,7 @@ from funmaze.graph import Graph, graph_nodes, Edge
 from funmaze.graph.grid import GridNode, neighbourhood_positions
 
 
-def bitmap_render(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
+def render_bitmap(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
                   ) -> npt.NDArray[np.bool_]:
     """Render the *graph* of a *grid* as a bitmap.
 

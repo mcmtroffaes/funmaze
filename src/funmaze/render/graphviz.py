@@ -5,7 +5,7 @@ import graphviz
 from funmaze.graph import Graph, Node, graph_nodes
 
 
-def graph_graphviz(
+def render_graphviz(
         graph: Graph[Node],
         names: Mapping[Node, str],
         positions: Mapping[Node, tuple[float, float]] | None = None,

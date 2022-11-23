@@ -8,8 +8,8 @@ from funmaze.graph import graph_remove_nodes, Edge, \
     graph_merge_nodes, graph_nodes, Graph
 from funmaze.graph.grid import grid_sequential, neighbourhood_graph, \
     grid_replace_nodes
-from funmaze.visualize.bitmap import bitmap_render, bitmap_remove_dots
-from funmaze.visualize.graphviz import graph_graphviz
+from funmaze.render.bitmap import render_bitmap, bitmap_remove_dots
+from funmaze.render.graphviz import render_graphviz
 
 
 def test_edge() -> None:
@@ -88,7 +88,7 @@ def test_graph_merge_nodes() -> None:
     }
 
 
-def test_graphviz(tmp_path) -> None:
+def test_graphviz() -> None:
     grid = grid_replace_nodes(
         itertools.product(range(3, 5), range(3, 5)),
         np.uint(99),
@@ -98,19 +98,19 @@ def test_graphviz(tmp_path) -> None:
             grid_sequential((7, 7))))
     graph = graph_remove_nodes(neighbourhood_graph(grid), {np.uint(99)})
     nodes = graph_nodes(graph)
-    names = {node: str(node) for node in sorted(nodes)}
+    names = {node: str(node) for node in nodes}
     positions = {
         node: (pos[1], -pos[0]) for pos, node in np.ndenumerate(grid)}
-    gv = graph_graphviz(graph, names, positions)
+    gv = render_graphviz(graph, names, positions)
     assert '0 [pos="0,0!"]' in gv.source
     assert '0 -- 1' in gv.source
     # for debugging:
-    # gv.render(tmp_path / "graph", view=True)
-    gv2 = graph_graphviz(graph, names)
+    # gv.render("gv", view=True)
+    gv2 = render_graphviz(graph, names)
     assert '0 [pos="0,0!"]' not in gv2.source
     assert '0 -- 1' in gv2.source
     # for debugging:
-    # gv2.render(tmp_path / "graph", view=True)
+    # gv2.render("gv2", view=True)
 
 
 def test_graphviz_2(tmp_path) -> None:
@@ -119,13 +119,13 @@ def test_graphviz_2(tmp_path) -> None:
     nodes = graph_nodes(graph)
     names = {node: "oops" for node in nodes}
     with pytest.raises(ValueError):  # names not unique
-        graph_graphviz(graph, names)
+        render_graphviz(graph, names)
 
 
 def test_bitmap_1() -> None:
     grid = grid_sequential((2, 2))
     graph = neighbourhood_graph(grid)
-    bitmap = bitmap_render(grid, graph)
+    bitmap = render_bitmap(grid, graph)
     assert (bitmap == np.array([
         [1, 1, 1, 1, 1],
         [1, 0, 0, 0, 1],
@@ -146,13 +146,13 @@ def test_bitmap_2() -> None:
     grid = grid_sequential((3, 3))
     graph: Graph[np.uint] = {Edge([0, 2])}  # not neighbours
     with pytest.raises(ValueError, match="not neighbours"):
-        bitmap_render(grid, graph)
+        render_bitmap(grid, graph)
 
 
 def test_bitmap_3() -> None:
     grid = np.array([[0, 1, 1]])
     graph = neighbourhood_graph(grid)
-    bitmap = bitmap_render(grid, graph)
+    bitmap = render_bitmap(grid, graph)
     assert (bitmap == np.array([
         [1, 1, 1, 1, 1, 1, 1],
         [1, 0, 0, 0, 0, 0, 1],
@@ -163,7 +163,7 @@ def test_bitmap_3() -> None:
 def test_bitmap_4() -> None:
     grid = np.array([[0, 1, 2, 2]])
     graph = {Edge([0, 1])}
-    bitmap = bitmap_render(grid, graph)
+    bitmap = render_bitmap(grid, graph)
     assert (bitmap == np.array([
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 0, 0, 0, 1, 1, 1, 1, 1],
