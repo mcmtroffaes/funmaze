@@ -16,7 +16,7 @@ def _recursive_backtracker(
         _recursive_backtracker(neighbours, maze, visited, node2)
 
 
-def generate_recursive_backtracker(graph: Graph[Node]) -> Graph[Node]:
+def generate_backtracker(graph: Graph[Node]) -> Graph[Node]:
     """Return a subgraph of *graph* representing a perfect maze on the graph,
     through the recursive backtracker algorithm.
     """

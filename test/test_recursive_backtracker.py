@@ -4,8 +4,7 @@ import sys
 import numpy as np
 import pytest
 
-from funmaze.generate.recursive_backtracker import \
-    generate_recursive_backtracker
+from funmaze.generate.backtracker import generate_backtracker
 from funmaze.graph.grid import grid_sequential, neighbourhood_graph, \
     grid_replace_nodes
 from funmaze.render.bitmap import render_bitmap
@@ -25,7 +24,7 @@ def recursion_limit():
 def test_recursive_backtracker_simple():
     grid = grid_sequential((5, 5))
     graph = neighbourhood_graph(grid)
-    maze = generate_recursive_backtracker(graph)
+    maze = generate_backtracker(graph)
     bitmap = render_bitmap(grid, maze).astype(int)
     assert sum(bitmap.flat) == 72  # perfect 5x5 maze has fixed number of walls
     # for debugging:
@@ -41,7 +40,7 @@ def test_recursive_backtracker_recursion_depth(recursion_limit):
     grid = grid_sequential((200, 1))
     graph = neighbourhood_graph(grid)
     with pytest.raises(RecursionError):
-        generate_recursive_backtracker(graph)
+        generate_backtracker(graph)
 
 
 def test_recursive_backtracker_grid_with_room():
@@ -50,7 +49,7 @@ def test_recursive_backtracker_grid_with_room():
         np.uint(99),
         grid_sequential((9, 9)))
     graph = neighbourhood_graph(grid)
-    maze = generate_recursive_backtracker(graph)
+    maze = generate_backtracker(graph)
     render_bitmap(grid, maze)
     # for debugging:
     # bitmap = render_bitmap(grid, maze)
@@ -65,4 +64,4 @@ def test_recursive_backtracker_grid_with_room():
 
 
 def test_recursive_backtracker_empty():
-    assert generate_recursive_backtracker(set()) == set()
+    assert generate_backtracker(set()) == set()
