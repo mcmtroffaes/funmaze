@@ -5,9 +5,10 @@ import numpy as np
 import pytest
 
 from funmaze.graph import graph_remove_nodes, Edge, \
-    graph_merge_nodes, graph_nodes
+    graph_merge_nodes, graph_nodes, Graph
 from funmaze.graph.grid import grid_sequential, neighbourhood_graph, \
     grid_replace_nodes
+from funmaze.visualize.bitmap import bitmap_render, bitmap_remove_dots
 from funmaze.visualize.graphviz import graph_graphviz
 
 
@@ -119,3 +120,52 @@ def test_graphviz_2(tmp_path) -> None:
     names = {node: "oops" for node in nodes}
     with pytest.raises(ValueError):  # names not unique
         graph_graphviz(graph, names)
+
+
+def test_bitmap_1() -> None:
+    grid = grid_sequential((2, 2))
+    graph = neighbourhood_graph(grid)
+    bitmap = bitmap_render(grid, graph)
+    assert (bitmap == np.array([
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1],
+    ]).astype(bool)).all()
+    assert (bitmap_remove_dots(bitmap) == np.array([
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1],
+    ]).astype(bool)).all()
+
+
+def test_bitmap_2() -> None:
+    grid = grid_sequential((3, 3))
+    graph: Graph[np.uint] = {Edge([0, 2])}  # not neighbours
+    with pytest.raises(ValueError, match="not neighbours"):
+        bitmap_render(grid, graph)
+
+
+def test_bitmap_3() -> None:
+    grid = np.array([[0, 1, 1]])
+    graph = neighbourhood_graph(grid)
+    bitmap = bitmap_render(grid, graph)
+    assert (bitmap == np.array([
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ]).astype(bool)).all()
+
+
+def test_bitmap_4() -> None:
+    grid = np.array([[0, 1, 2, 2]])
+    graph = {Edge([0, 1])}
+    bitmap = bitmap_render(grid, graph)
+    assert (bitmap == np.array([
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ]).astype(bool)).all()

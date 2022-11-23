@@ -1,53 +1,84 @@
+import itertools
 from collections.abc import Mapping, Set
+from typing import Iterable
 
 import numpy as np
 import numpy.typing as npt
 
-from funmaze.graph import Graph, Node, graph_nodes
+from funmaze.graph import Graph, graph_nodes, Edge
+from funmaze.graph.grid import GridNode, neighbourhood_positions
 
 
-def _connect(pos_set1: Set[tuple[int, int]],
-             pos_set2: Set[tuple[int, int]]) -> tuple[int, int] | None:
-    for pos1 in sorted(pos_set1):
-        for pos2 in sorted(pos_set2):
-            delta_x = abs(pos1[0] - pos2[0])
-            delta_y = abs(pos1[1] - pos2[1])
-            if {delta_x, delta_y} == {0, 2}:
-                return (pos1[0] + pos2[0]) // 2, (pos1[1] + pos2[1]) // 2
-    return None
+def bitmap_render(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
+                  ) -> npt.NDArray[np.bool_]:
+    """Render the *graph* of a *grid* as a bitmap.
 
-
-def graph_bitmap(
-        graph: Graph[Node],
-        positions: Mapping[Node, Set[tuple[int, int]]],
-        node_colors: Mapping[Node, int],
-        wall_color: int,
-        edge_color: int,
-) -> npt.NDArray[np.int_]:
-    if len({wall_color, edge_color} | set(node_colors.values())
-           ) != 2 + len(node_colors):
-        raise ValueError("colors of nodes, walls, and edges not distinct")
-    size_x = 2 + max(
-        pos[0] for pos_set in positions.values() for pos in pos_set)
-    size_y = 2 + max(
-        pos[1] for pos_set in positions.values() for pos in pos_set)
-    # set walls everywhere
-    bitmap = np.full((size_x, size_y), wall_color)
-    # insert nodes
-    for node in graph_nodes(graph):
-        for pos in positions[node]:
-            bitmap[pos] = node_colors[node]
+    Nodes and edges are False and walls are True.
+    This results in a bitmap representation of the graph's topology.
+    The *graph* must be a subgraph of the neighbourhood graph
+    of *grid*, that is,
+    every edge in *graph* must correspond to neighbouring nodes in *grid*.
+    """
+    def _bitmap_pos(grid_pos: tuple[int, ...]) -> tuple[int, ...]:
+        return tuple(1 + 2 * i for i in grid_pos)
+    # start with walls everywhere
+    bitmap = np.full(_bitmap_pos(grid.shape), True)
+    nodes = graph_nodes(graph)
+    # remove walls at nodes in the graph
+    for pos, node in np.ndenumerate(grid):
+        if node in nodes:
+            bitmap[_bitmap_pos(pos)] = False
     # insert edges
-    for edge in graph:
-        pos_set1, pos_set2 = tuple(positions[node] for node in edge)
-        val1, val2 = tuple(node_colors[node] for node in edge)
-        edge_pos: tuple[int, int] | None = _connect(pos_set1, pos_set2)
-        if edge_pos is None:
-            raise ValueError(
-                f"cannot create edge between {val1} and {val2}\n{bitmap}")
-        if bitmap[edge_pos] != wall_color:
-            raise ValueError(
-                f"cannot create edge at {edge_pos} between {val1} and {val2}\n"
-                f"{bitmap}")
-        bitmap[edge_pos] = edge_color
+    missing_edges: set[Edge[GridNode]] = set(graph)
+    for pos1, node1 in np.ndenumerate(grid):
+        for pos2 in neighbourhood_positions(grid.shape, pos1, steps=(1,)):
+            node1 = grid[pos1]
+            node2 = grid[pos2]
+            b_pos1 = _bitmap_pos(pos1)
+            b_pos2 = _bitmap_pos(pos2)
+            e_pos = tuple((i + j) // 2 for i, j in zip(b_pos1, b_pos2))
+            if node1 == node2:
+                if node1 in nodes:
+                    bitmap[e_pos] = False
+            else:
+                edge = Edge({node1, node2})
+                if edge in graph:
+                    bitmap[e_pos] = False
+                    missing_edges.discard(edge)
+    if missing_edges:
+        raise ValueError(
+            f"cannot add edges {missing_edges} as nodes are not neighbours")
     return bitmap
+
+
+_square_deltas = frozenset(
+    itertools.product([-1, 0, 1], [-1, 0, 1])) - {(0, 0)}
+
+
+def _square_around_position(axis1: int, axis2: int, pos: tuple[int, ...]
+                            ) -> Iterable[tuple[int, ...]]:
+    assert 0 <= axis1 < len(pos)
+    assert 0 <= axis2 < len(pos)
+    for delta in _square_deltas:
+        yield tuple(
+            x
+            + (delta[0] if k == axis1 else 0)
+            + (delta[1] if k == axis2 else 0)
+            for k, x in enumerate(pos))
+
+
+def bitmap_remove_dots(bitmap: npt.NDArray[np.bool_]) -> npt.NDArray[np.bool_]:
+    """Remove individual walls that are completely surrounded by a square of
+    non-walls (aka "dots").
+    """
+    bitmap2 = bitmap.copy()
+    for pos, wall in np.ndenumerate(bitmap):
+        for axis1, axis2 in itertools.combinations(
+                range(len(bitmap.shape)), 2):
+            if all(1 <= pos[k] < bitmap.shape[k] - 1 for k in {axis1, axis2}):
+                surrounding_walls = (
+                    bitmap[pos2]
+                    for pos2 in _square_around_position(axis1, axis2, pos))
+                if not any(surrounding_walls):
+                    bitmap2[pos] = False
+    return bitmap2
