@@ -33,11 +33,11 @@ def neighbourhood_positions(
     """List all positions neighbouring *pos* on a grid of the given *shape*,
     assuming we can move in *steps* along a single axis.
     """
-    for i in range(len(shape)):
+    for i, (x, x_max) in enumerate(zip(pos, shape)):
         for step in steps:
-            if 0 <= pos[i] + step < shape[i]:
-                yield tuple((x + step) if i == j else x
-                            for j, x in enumerate(pos))
+            if 0 <= x + step < x_max:
+                yield tuple((x2 + step) if i == j else x2
+                            for j, x2 in enumerate(pos))
 
 
 def neighbourhood_graph(grid: npt.NDArray[GridNode]) -> Graph[GridNode]:
