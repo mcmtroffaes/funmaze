@@ -12,10 +12,10 @@ from funmaze.render.bitmap import render_bitmap
 
 
 @pytest.fixture
-def recursion_limit_50():
+def recursion_limit():
     """Fixture to lower the recursion limit, to speed up tests."""
     old_limit = sys.getrecursionlimit()
-    sys.setrecursionlimit(50)
+    sys.setrecursionlimit(100)
     try:
         yield
     finally:
@@ -37,8 +37,8 @@ def test_recursive_backtracker_simple():
     # render_graphviz(maze, names, positions).render(view=True)
 
 
-def test_recursive_backtracker_recursion_depth(recursion_limit_50):
-    grid = grid_sequential((100, 1))
+def test_recursive_backtracker_recursion_depth(recursion_limit):
+    grid = grid_sequential((200, 1))
     graph = neighbourhood_graph(grid)
     with pytest.raises(RecursionError):
         generate_recursive_backtracker(graph)
