@@ -1,7 +1,7 @@
 import random
 from collections.abc import Mapping, Set, MutableSet
 
-from funmaze.graph import Graph, Node, Edge, graph_nodes
+from funmaze.graph import Graph, Node, Edge
 
 
 def _recursive_backtracker(
