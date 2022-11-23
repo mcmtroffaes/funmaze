@@ -62,3 +62,7 @@ def test_recursive_backtracker_grid_with_room():
     # from funmaze.render.graphviz import render_graphviz
     # render_graphviz(maze, names, positions).render(view=True)
     # raise
+
+
+def test_recursive_backtracker_empty():
+    assert generate_recursive_backtracker(set()) == set()
