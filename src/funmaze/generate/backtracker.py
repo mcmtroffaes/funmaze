@@ -8,12 +8,18 @@ def _recursive_backtracker(
         neighbours: Mapping[Node, Set[Node]], maze: MutableSet[Edge[Node]],
         visited: MutableSet[Node], node: Node
 ) -> None:
+    stack: list[Node] = []
     visited.add(node)
-    while good_neighbours := [
-            node2 for node2 in neighbours[node] if node2 not in visited]:
-        node2 = random.choice(good_neighbours)
-        maze.add(Edge((node, node2)))
-        _recursive_backtracker(neighbours, maze, visited, node2)
+    stack.append(node)
+    while stack:
+        node = stack.pop()
+        if good_neighbours := [
+                node2 for node2 in neighbours[node] if node2 not in visited]:
+            stack.append(node)
+            node2 = random.choice(good_neighbours)
+            maze.add(Edge((node, node2)))
+            visited.add(node2)
+            stack.append(node2)
 
 
 def generate_backtracker(graph: Graph[Node]) -> Graph[Node]:

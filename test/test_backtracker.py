@@ -1,24 +1,11 @@
 import itertools
-import sys
 
 import numpy as np
-import pytest
 
 from funmaze.generate.backtracker import generate_backtracker
 from funmaze.graph.grid import grid_sequential, neighbourhood_graph, \
     grid_replace_nodes
 from funmaze.render.bitmap import render_bitmap
-
-
-@pytest.fixture
-def recursion_limit():
-    """Fixture to lower the recursion limit, to speed up tests."""
-    old_limit = sys.getrecursionlimit()
-    sys.setrecursionlimit(100)
-    try:
-        yield
-    finally:
-        sys.setrecursionlimit(old_limit)
 
 
 def test_recursive_backtracker_simple():
@@ -34,13 +21,6 @@ def test_recursive_backtracker_simple():
     #     node: (pos[1], -pos[0]) for pos, node in np.ndenumerate(grid)}
     # from funmaze.render.graphviz import render_graphviz
     # render_graphviz(maze, names, positions).render(view=True)
-
-
-def test_recursive_backtracker_recursion_depth(recursion_limit):
-    grid = grid_sequential((200, 1))
-    graph = neighbourhood_graph(grid)
-    with pytest.raises(RecursionError):
-        generate_backtracker(graph)
 
 
 def test_recursive_backtracker_grid_with_room():
@@ -69,6 +49,6 @@ def test_recursive_backtracker_empty():
 
 def test_recursive_backtracker_large():
     """Larger test to help profiling."""
-    grid = grid_sequential((30, 30))
+    grid = grid_sequential((40, 40))
     graph = neighbourhood_graph(grid)
     generate_backtracker(graph)
