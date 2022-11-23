@@ -1,10 +1,13 @@
+import itertools
 import sys
 
+import numpy as np
 import pytest
 
 from funmaze.generate.recursive_backtracker import \
     generate_recursive_backtracker
-from funmaze.graph.grid import grid_sequential, neighbourhood_graph
+from funmaze.graph.grid import grid_sequential, neighbourhood_graph, \
+    grid_replace_nodes
 from funmaze.render.bitmap import render_bitmap
 
 
@@ -39,3 +42,23 @@ def test_recursive_backtracker_recursion_depth(recursion_limit_50):
     graph = neighbourhood_graph(grid)
     with pytest.raises(RecursionError):
         generate_recursive_backtracker(graph)
+
+
+def test_recursive_backtracker_grid_with_room():
+    grid = grid_replace_nodes(
+        itertools.product(range(3, 6), range(3, 6)),
+        np.uint(99),
+        grid_sequential((9, 9)))
+    graph = neighbourhood_graph(grid)
+    maze = generate_recursive_backtracker(graph)
+    render_bitmap(grid, maze)
+    # for debugging:
+    # bitmap = render_bitmap(grid, maze)
+    # from funmaze.render.bitmap import bitmap_remove_dots
+    # print(bitmap_remove_dots(bitmap).astype(int))
+    # names = {node: str(node) for _, node in np.ndenumerate(grid)}
+    # positions = {
+    #    node: (pos[1], -pos[0]) for pos, node in np.ndenumerate(grid)}
+    # from funmaze.render.graphviz import render_graphviz
+    # render_graphviz(maze, names, positions).render(view=True)
+    # raise
