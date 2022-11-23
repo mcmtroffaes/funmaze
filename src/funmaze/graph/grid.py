@@ -47,5 +47,5 @@ def neighbourhood_graph(grid: npt.NDArray[GridNode]) -> Graph[GridNode]:
             for pos2 in neighbourhood_positions(grid.shape, pos):
                 node2 = grid[pos2]
                 if node != node2:
-                    yield Edge({node, node2})
+                    yield Edge((node, node2))
     return frozenset(_edges())
