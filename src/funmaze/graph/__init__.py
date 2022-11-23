@@ -3,6 +3,8 @@ from collections.abc import Set
 from dataclasses import dataclass, InitVar, field
 from typing import TypeVar, Iterator, Iterable
 
+import numpy as np
+
 Node = TypeVar("Node")
 
 
@@ -35,6 +37,18 @@ Graph = Set[Edge[Node]]
 def graph_nodes(graph: Graph[Node]) -> Set[Node]:
     """Set of all nodes of *graph*."""
     return frozenset(itertools.chain.from_iterable(graph))
+
+
+def graph_grid_sequential(shape: tuple[int, ...]) -> Graph[tuple[int, int]]:
+    """Construct a grid shaped graph."""
+    def _edges():
+        for pos in np.ndindex(*shape):
+            for i, (x, max_x) in enumerate(zip(pos, shape)):
+                if x + 1 < max_x:
+                    pos2 = tuple((xx + 1) if i == j else xx
+                                 for j, xx in enumerate(pos))
+                    yield Edge((pos, pos2))
+    return frozenset(_edges())
 
 
 def graph_remove_nodes(graph: Graph, nodes: Set[Node]) -> Graph[Node]:
