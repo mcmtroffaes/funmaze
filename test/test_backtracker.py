@@ -65,3 +65,10 @@ def test_recursive_backtracker_grid_with_room():
 
 def test_recursive_backtracker_empty():
     assert generate_backtracker(set()) == set()
+
+
+def test_recursive_backtracker_large():
+    """Larger test to help profiling."""
+    grid = grid_sequential((20, 20))
+    graph = neighbourhood_graph(grid)
+    generate_backtracker(graph)

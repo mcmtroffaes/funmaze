@@ -22,12 +22,11 @@ def generate_backtracker(graph: Graph[Node]) -> Graph[Node]:
     """
     maze: set[Edge[Node]] = set()
     nodes = graph_nodes(graph)
-    neighbours = {
-        node: set(
-            tuple(node2)[0] for edge in graph
-            if len(node2 := set(edge) - {node}) == 1)
-        for node in nodes
-    }
+    neighbours: dict[Node, set[Node]] = {}
+    for edge in graph:
+        node1, node2 = tuple(edge)
+        neighbours.setdefault(node1, set()).add(node2)
+        neighbours.setdefault(node2, set()).add(node1)
     if nodes:
         initial_node = random.choice(list(nodes))
         visited: set[Node] = set()
