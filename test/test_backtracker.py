@@ -3,7 +3,7 @@ import itertools
 import numpy as np
 
 from funmaze.generate.backtracker import generate_backtracker
-from funmaze.graph import graph_grid_sequential
+from funmaze.graph import graph_grid
 from funmaze.graph.grid import grid_sequential, neighbourhood_graph, \
     grid_replace_nodes
 from funmaze.render.bitmap import render_bitmap
@@ -50,5 +50,5 @@ def test_recursive_backtracker_empty():
 
 def test_recursive_backtracker_large():
     """Larger test to help profiling."""
-    graph = graph_grid_sequential((100, 100))
+    graph = graph_grid((100, 100))
     generate_backtracker(graph)

@@ -39,7 +39,7 @@ def graph_nodes(graph: Graph[Node]) -> Set[Node]:
     return frozenset(itertools.chain.from_iterable(graph))
 
 
-def graph_grid_sequential(shape: tuple[int, ...]) -> Graph[tuple[int, int]]:
+def graph_grid(shape: tuple[int, ...]) -> Graph[tuple[int, int]]:
     """Construct a grid shaped graph."""
     def _edges():
         for pos in np.ndindex(*shape):
