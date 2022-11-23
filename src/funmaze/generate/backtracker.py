@@ -24,7 +24,7 @@ def generate_backtracker(graph: Graph[Node]) -> Graph[Node]:
     nodes = graph_nodes(graph)
     neighbours: dict[Node, set[Node]] = {}
     for edge in graph:
-        node1, node2 = tuple(edge)
+        node1, node2 = edge
         neighbours.setdefault(node1, set()).add(node2)
         neighbours.setdefault(node2, set()).add(node1)
     if nodes:
