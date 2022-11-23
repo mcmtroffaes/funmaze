@@ -24,7 +24,8 @@ def generate_recursive_backtracker(graph: Graph[Node]) -> Graph[Node]:
     nodes = graph_nodes(graph)
     neighbours = {
         node: set(
-            tuple(set(edge) - {node})[0] for edge in graph if node in edge)
+            tuple(node2)[0] for edge in graph
+            if len(node2 := set(edge) - {node}) == 1)
         for node in nodes
     }
     if nodes:
