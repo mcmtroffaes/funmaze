@@ -35,10 +35,9 @@ def neighbourhood_positions(
     """
     for i in range(len(shape)):
         for step in steps:
-            pos2 = tuple(pos[j] + (step if i == j else 0)
-                         for j in range(len(shape)))
-            if all(0 <= x < m for x, m in zip(pos2, shape)):
-                yield pos2
+            if 0 <= pos[i] + step < shape[i]:
+                yield tuple((x + step) if i == j else x
+                            for j, x in enumerate(pos))
 
 
 def neighbourhood_graph(grid: npt.NDArray[GridNode]) -> Graph[GridNode]:
