@@ -36,6 +36,3 @@ def generate_backtracking(graph: Graph[Node]) -> Graph[Node]:
         visited: set[Node] = set()
         _backtracking(neighbours, maze, visited, initial_node)
     return maze
-
-
-# TODO add a stack implementation which does not break recursion depth
