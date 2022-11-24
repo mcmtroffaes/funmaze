@@ -10,9 +10,10 @@ from funmaze.graph.grid import GridNode, neighbourhood_positions
 
 def render_bitmap(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
                   ) -> npt.NDArray[np.bool_]:
-    """Render the *graph* of a *grid* as a bitmap.
+    """Render the *graph* of a *grid* as a bitmap,
+    with walls in even positions and corridors in odd positions.
 
-    Nodes and edges are False and walls are True.
+    Nodes and edges are ``False`` and walls are ``True``.
     This results in a bitmap representation of the graph's topology.
     The *graph* must be a subgraph of the neighbourhood graph
     of *grid*, that is,
