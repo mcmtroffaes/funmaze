@@ -1,15 +1,10 @@
-import itertools
 from typing import Iterable
 
 import numpy as np
 import pytest
 
-from funmaze.graph import graph_remove_nodes, Edge, \
-    graph_merge_nodes, graph_nodes, Graph
-from funmaze.graph.grid import grid_sequential, neighbourhood_graph, \
-    grid_replace_nodes
-from funmaze.render.bitmap import render_bitmap, bitmap_remove_dots
-from funmaze.render.graphviz import render_graphviz
+from funmaze.graph import graph_remove_nodes, Edge, graph_merge_nodes, Graph
+from funmaze.graph.grid import grid_sequential, neighbourhood_graph
 
 
 def test_edge() -> None:

@@ -1,5 +1,5 @@
 import itertools
-from typing import Iterable
+from typing import Iterable, TypeVar
 
 import numpy as np
 import numpy.typing as npt
@@ -84,7 +84,11 @@ def bitmap_remove_dots(bitmap: npt.NDArray[np.bool_]) -> npt.NDArray[np.bool_]:
     return bitmap2
 
 
-def bitmap_scale(bitmap: npt.NDArray, wall: int, corridor: int):
+T = TypeVar("T", bound=np.generic)
+
+
+def bitmap_scale(
+        bitmap: npt.NDArray[T], wall: int, corridor: int) -> npt.NDArray[T]:
     """Scale bitmap, assuming walls in even positions and corridors
     in odd positions.
     """
@@ -100,7 +104,7 @@ def bitmap_scale(bitmap: npt.NDArray, wall: int, corridor: int):
     # (i // 2) = number of corridors
     shape = tuple(wall * ((i + 1) // 2) + corridor * (i // 2)
                   for i in bitmap.shape)
-    bitmap2 = np.ndarray(shape, dtype=bitmap.dtype)
+    bitmap2: npt.NDArray = np.ndarray(shape, dtype=bitmap.dtype)
     for pos, value in np.ndenumerate(bitmap):
         bitmap2[tuple(_map(x) for x in pos)] = value
     return bitmap2
