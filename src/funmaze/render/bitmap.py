@@ -32,7 +32,6 @@ def render_bitmap(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
     missing_edges: set[Edge[GridNode]] = set(graph)
     for pos1, node1 in np.ndenumerate(grid):
         for pos2 in neighbourhood_positions(grid.shape, pos1, steps=(1,)):
-            node1 = grid[pos1]
             node2 = grid[pos2]
             b_pos1 = _bitmap_pos(pos1)
             b_pos2 = _bitmap_pos(pos2)
@@ -41,10 +40,10 @@ def render_bitmap(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
                 if node1 in nodes:
                     bitmap[e_pos] = False
             else:
-                edge = Edge({node1, node2})
-                if edge in graph:
-                    bitmap[e_pos] = False
-                    missing_edges.discard(edge)
+                for edge in ((node1, node2), (node2, node1)):
+                    if edge in graph:
+                        bitmap[e_pos] = False
+                        missing_edges.discard(edge)
     if missing_edges:
         raise ValueError(
             f"cannot add edges {missing_edges} as nodes are not neighbours")

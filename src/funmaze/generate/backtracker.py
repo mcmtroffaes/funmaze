@@ -17,7 +17,7 @@ def _backtracker(
                 node2 for node2 in neighbours[node] if node2 not in visited]:
             stack.append(node)
             node2 = random.choice(good_neighbours)
-            maze.add(Edge((node, node2)))
+            maze.add((node, node2))
             visited.add(node2)
             stack.append(node2)
 
@@ -28,8 +28,7 @@ def generate_backtracker(graph: Graph[Node]) -> Graph[Node]:
     """
     maze: set[Edge[Node]] = set()
     neighbours: dict[Node, set[Node]] = {}
-    for edge in graph:
-        node1, node2 = edge
+    for node1, node2 in graph:
         neighbours.setdefault(node1, set()).add(node2)
         neighbours.setdefault(node2, set()).add(node1)
     if graph:
