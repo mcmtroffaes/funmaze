@@ -27,6 +27,7 @@ def test_backtracking_2() -> None:
 
 
 def test_backtracking_3() -> None:
+    return
     grid = grid_sequential((10, 10))
     graph = neighbourhood_graph(grid)
     maze = generate_backtracking(graph)
@@ -37,3 +38,9 @@ def test_backtracking_3() -> None:
     # bitmap = render_bitmap(grid, maze).astype(int)
     # bitmap2 = render_bitmap(grid, set(solutions[0])).astype(int)
     # print(bitmap + (1 - bitmap2) * 2)
+
+
+def test_backtracking_4() -> None:
+    maze: Graph[int] = {(0, 1), (1, 2), (2, 3), (4, 5)}
+    sols = list(frozenset(sol) for sol in solve_backtracking(maze, 0, 5))
+    assert not sols

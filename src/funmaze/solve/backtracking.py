@@ -24,4 +24,4 @@ def solve_backtracking(graph: Graph[Node], start: Node, end: Node
             node2 = random.choice(good_neighbours)
             visited.add(node2)
             stack.append(node2)
-    return [zip(stack[:-1], stack[1:])]
+    return [zip(stack[:-1], stack[1:])] if stack else []
