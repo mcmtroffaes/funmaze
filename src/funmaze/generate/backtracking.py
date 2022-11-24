@@ -4,7 +4,7 @@ from collections.abc import Mapping, Set, MutableSet
 from funmaze.graph import Graph, Node, Edge
 
 
-def _backtracker(
+def _backtracking(
         neighbours: Mapping[Node, Set[Node]], maze: MutableSet[Edge[Node]],
         visited: MutableSet[Node], node: Node
 ) -> None:
@@ -22,7 +22,7 @@ def _backtracker(
             stack.append(node2)
 
 
-def generate_backtracker(graph: Graph[Node]) -> Graph[Node]:
+def generate_backtracking(graph: Graph[Node]) -> Graph[Node]:
     """Return a subgraph of *graph* representing a perfect maze on the graph,
     through the recursive backtracker algorithm.
     """
@@ -34,7 +34,7 @@ def generate_backtracker(graph: Graph[Node]) -> Graph[Node]:
     if graph:
         initial_node = random.choice(list(random.choice(list(graph))))
         visited: set[Node] = set()
-        _backtracker(neighbours, maze, visited, initial_node)
+        _backtracking(neighbours, maze, visited, initial_node)
     return maze
 
 
