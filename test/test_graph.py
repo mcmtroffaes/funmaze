@@ -1,10 +1,9 @@
 from collections.abc import Set
-from typing import Iterable
 
 import numpy as np
 import pytest
 
-from funmaze.graph import graph_remove_nodes, Edge, graph_merge_nodes, Graph
+from funmaze.graph import graph_remove_nodes, graph_merge_nodes, Graph
 from funmaze.graph.grid import grid_sequential, neighbourhood_graph
 
 

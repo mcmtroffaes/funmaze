@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from funmaze.graph import Graph, Edge
+from funmaze.graph import Graph
 from funmaze.graph.grid import grid_sequential, neighbourhood_graph
 from funmaze.render.bitmap import render_bitmap, bitmap_remove_dots, \
     bitmap_scale
