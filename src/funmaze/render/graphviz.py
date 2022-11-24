@@ -13,7 +13,7 @@ def render_graphviz(
         fmt: str = 'pdf',
 ) -> graphviz.Graph:
     # note: default engine set to 'neato' to support node positions
-    if len(frozenset(names.values())) != len(names.values()):
+    if len(frozenset(names.values())) != len(names):
         raise ValueError("names must be unique")
     gv = graphviz.Graph(strict=True, engine=engine, format=fmt)
     if positions is not None:
@@ -21,8 +21,6 @@ def render_graphviz(
             pos = positions[node]
             name = names[node]
             gv.node(name, pos=f"{pos[0]},{pos[1]}!")
-    for edge in graph:
-        edge_names = sorted(names[node] for node in edge)
-        assert len(edge_names) == 2
-        gv.edge(*edge_names)
+    for node1, node2 in graph:
+        gv.edge(names[node1], names[node2])
     return gv
