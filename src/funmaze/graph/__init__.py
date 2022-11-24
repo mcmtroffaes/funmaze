@@ -60,16 +60,21 @@ def graph_remove_nodes(graph: Graph, nodes: Set[Node]) -> Graph[Node]:
 def graph_merge_nodes(
         graph: Graph, nodes: Set[Node], target: Node) -> Graph[Node]:
     """Remove and merge *nodes* from *graph* into a *target* node.
-    The *target* can be contained in *nodes*, can be a completely
-    new node, or can be some other node in *graph*.
+    The *nodes* must contain the *target*.
     """
     def _update(edge: Edge[Node]) -> Edge[Node] | None:
-        good_nodes = frozenset(edge) - nodes
-        if len(good_nodes) == 2:
-            return edge
-        elif len(good_nodes | {target}) == 2:
-            return Edge(good_nodes | {target})
+        node1, node2 = edge
+        if node1 not in nodes:
+            if node2 not in nodes:
+                return edge
+            else:
+                return Edge((node1, target))
         else:
-            return None
+            if node2 not in nodes:
+                return Edge((target, node2))
+            else:
+                return None
+    if target not in nodes:
+        raise ValueError("nodes must contain target")
     return frozenset(
         edge2 for edge in graph if (edge2 := _update(edge)) is not None)
