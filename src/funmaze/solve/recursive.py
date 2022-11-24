@@ -3,14 +3,15 @@ from collections.abc import Set, Mapping, Iterable
 from funmaze.graph import Graph, Node, Edge
 
 
+def _combine(x, xs: Iterable) -> Iterable:
+    yield x
+    yield from xs
+
+
 def _recursive(
         neighbours: Mapping[Node, Set[Node]], start: Node, end: Node,
         visited: Set[Node],
 ) -> Iterable[Iterable[Edge]]:
-    def _combine(x, xs: Iterable) -> Iterable:
-        yield x
-        yield from xs
-    # TODO use stack implementation?
     if start == end:
         yield []
     else:
