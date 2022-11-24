@@ -25,7 +25,7 @@ def _recursive(
 
 def solve_recursive(graph: Graph[Node], start: Node, end: Node
                     ) -> Iterable[Iterable[Edge]]:
-    """Recursively find all solutions.
+    """Recursively find all solutions without cycles.
 
     Warning: currently not suitable for large mazes as function recursion
     depth is likely to be exceeded.
