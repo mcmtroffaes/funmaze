@@ -48,7 +48,7 @@ def test_grid_neighbourhood_graph(
     assert neighbourhood_graph(grid) == graph
 
 
-def test_grid_graph_mask() -> None:
+def test_graph_remove_nodes() -> None:
     grid = grid_sequential((4, 4))
     graph = neighbourhood_graph(grid)
     rec = {5, 6, 7, 9, 10, 11, 13, 14, 15}
@@ -120,52 +120,3 @@ def test_graphviz_2(tmp_path) -> None:
     names = {node: "oops" for node in nodes}
     with pytest.raises(ValueError):  # names not unique
         render_graphviz(graph, names)
-
-
-def test_bitmap_1() -> None:
-    grid = grid_sequential((2, 2))
-    graph = neighbourhood_graph(grid)
-    bitmap = render_bitmap(grid, graph)
-    assert (bitmap == np.array([
-        [1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 1, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1],
-    ]).astype(bool)).all()
-    assert (bitmap_remove_dots(bitmap) == np.array([
-        [1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1],
-    ]).astype(bool)).all()
-
-
-def test_bitmap_2() -> None:
-    grid = grid_sequential((3, 3))
-    graph: Graph[np.uint] = {Edge([np.uint(0), np.uint(2)])}  # not neighbours
-    with pytest.raises(ValueError, match="not neighbours"):
-        render_bitmap(grid, graph)
-
-
-def test_bitmap_3() -> None:
-    grid = np.array([[0, 1, 1]])
-    graph = neighbourhood_graph(grid)
-    bitmap = render_bitmap(grid, graph)
-    assert (bitmap == np.array([
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-    ]).astype(bool)).all()
-
-
-def test_bitmap_4() -> None:
-    grid = np.array([[0, 1, 2, 2]])
-    graph = {Edge([0, 1])}
-    bitmap = render_bitmap(grid, graph)
-    assert (bitmap == np.array([
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ]).astype(bool)).all()
