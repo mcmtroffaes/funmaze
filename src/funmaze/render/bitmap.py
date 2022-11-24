@@ -81,3 +81,22 @@ def bitmap_remove_dots(bitmap: npt.NDArray[np.bool_]) -> npt.NDArray[np.bool_]:
                 if not any(surrounding_walls):
                     bitmap2[pos] = False
     return bitmap2
+
+
+def bitmap_scale(bitmap: npt.NDArray, wall: int, corridor: int):
+    """Scale bitmap, assuming walls in even positions and corridors
+    in odd positions.
+    """
+    width = wall + corridor
+
+    def pixel_map(x: int) -> int:
+        return ((x // width) * 2) + int(x % width >= wall)
+
+    # (i // 2) = number of corridor pixels
+    # (i + 1) // 2 = number of wall pixels
+    shape = tuple(
+        wall * ((i + 1) // 2) + corridor * (i // 2) for i in bitmap.shape)
+    bitmap2 = np.ndarray(shape, dtype=bitmap.dtype)
+    for pos, _ in np.ndenumerate(bitmap2):
+        bitmap2[pos] = bitmap[tuple(pixel_map(x) for x in pos)]
+    return bitmap2

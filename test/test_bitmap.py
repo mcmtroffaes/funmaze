@@ -3,27 +3,28 @@ import pytest
 
 from funmaze.graph import Graph, Edge
 from funmaze.graph.grid import grid_sequential, neighbourhood_graph
-from funmaze.render.bitmap import render_bitmap, bitmap_remove_dots
+from funmaze.render.bitmap import render_bitmap, bitmap_remove_dots, \
+    bitmap_scale
 
 
 def test_bitmap_1() -> None:
     grid = grid_sequential((2, 2))
     graph = neighbourhood_graph(grid)
     bitmap = render_bitmap(grid, graph)
-    assert (bitmap == np.array([
+    np.testing.assert_array_equal(bitmap, np.array([
         [1, 1, 1, 1, 1],
         [1, 0, 0, 0, 1],
         [1, 0, 1, 0, 1],
         [1, 0, 0, 0, 1],
         [1, 1, 1, 1, 1],
-    ]).astype(bool)).all()
-    assert (bitmap_remove_dots(bitmap) == np.array([
+    ]))
+    np.testing.assert_array_equal(bitmap_remove_dots(bitmap), np.array([
         [1, 1, 1, 1, 1],
         [1, 0, 0, 0, 1],
         [1, 0, 0, 0, 1],
         [1, 0, 0, 0, 1],
         [1, 1, 1, 1, 1],
-    ]).astype(bool)).all()
+    ]))
 
 
 def test_bitmap_2() -> None:
@@ -37,19 +38,60 @@ def test_bitmap_3() -> None:
     grid = np.array([[0, 1, 1]])
     graph = neighbourhood_graph(grid)
     bitmap = render_bitmap(grid, graph)
-    assert (bitmap == np.array([
+    np.testing.assert_array_equal(bitmap, np.array([
         [1, 1, 1, 1, 1, 1, 1],
         [1, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
-    ]).astype(bool)).all()
+    ]))
 
 
 def test_bitmap_4() -> None:
     grid = np.array([[0, 1, 2, 2]])
     graph = {Edge([0, 1])}
     bitmap = render_bitmap(grid, graph)
-    assert (bitmap == np.array([
+    np.testing.assert_array_equal(bitmap, np.array([
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 0, 0, 0, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ]).astype(bool)).all()
+    ]))
+
+
+def test_bitmap_scale_1() -> None:
+    bitmap = np.array([
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1],
+    ])
+    bitmap2 = bitmap_scale(bitmap, 2, 3)
+    np.testing.assert_array_equal(bitmap2, np.array([
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1],
+        [1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1],
+        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ]))
+
+
+def test_bitmap_scale_2() -> None:
+    bitmap = np.array([
+        [1, 1],
+        [1, 0],
+    ])
+    bitmap2 = bitmap_scale(bitmap, 4, 2)
+    np.testing.assert_array_equal(bitmap2, np.array([
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 0, 0],
+    ]))
