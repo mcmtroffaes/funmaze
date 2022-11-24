@@ -92,11 +92,11 @@ def bitmap_scale(bitmap: npt.NDArray, wall: int, corridor: int):
     def pixel_map(x: int) -> int:
         return ((x // width) * 2) + int(x % width >= wall)
 
-    # (i // 2) = number of corridor pixels
-    # (i + 1) // 2 = number of wall pixels
-    shape = tuple(
-        wall * ((i + 1) // 2) + corridor * (i // 2) for i in bitmap.shape)
+    # (i + 1) // 2 = number of walls
+    # (i // 2) = number of corridors
+    shape = tuple(wall * ((i + 1) // 2) + corridor * (i // 2)
+                  for i in bitmap.shape)
     bitmap2 = np.ndarray(shape, dtype=bitmap.dtype)
-    for pos, _ in np.ndenumerate(bitmap2):
+    for pos in np.ndindex(*bitmap2.shape):
         bitmap2[pos] = bitmap[tuple(pixel_map(x) for x in pos)]
     return bitmap2
