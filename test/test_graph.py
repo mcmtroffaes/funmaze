@@ -73,18 +73,10 @@ def test_graph_merge_nodes() -> None:
     # 8  ** 10 **
     # 12 ** ** **
     assert graph2 == {
-        Edge([0, 1]),
-        Edge([1, 2]),
-        Edge([2, 3]),
-        Edge([0, 4]),
-        Edge([4, 8]),
-        Edge([8, 12]),
-        Edge([1, 10]),
-        Edge([2, 10]),
-        Edge([3, 10]),
-        Edge([4, 10]),
-        Edge([8, 10]),
-        Edge([12, 10]),
+        Edge([0, 1]), Edge([1, 2]), Edge([2, 3]),
+        Edge([0, 4]), Edge([4, 8]), Edge([8, 12]),
+        Edge([1, 10]), Edge([2, 10]), Edge([3, 10]),
+        Edge([4, 10]),  Edge([8, 10]), Edge([12, 10]),
     }
 
 
