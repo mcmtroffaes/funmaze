@@ -4,8 +4,8 @@ from collections.abc import Iterable, Mapping, Set
 from funmaze.graph import IGraph, Node, graph_neighbours
 
 
-def solve_shortest(graph: IGraph[Node], start: Node, end: Node
-                   ) -> Iterable[Iterable[Node]]:
+def solve_shortest_bfs(graph: IGraph[Node], start: Node, end: Node
+                       ) -> Iterable[Iterable[Node]]:
     """Use a breadth-first-search on the graph to find one shortest path
     between two nodes.
     """
