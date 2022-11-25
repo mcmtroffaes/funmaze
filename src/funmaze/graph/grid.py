@@ -49,11 +49,13 @@ def graph_grid(shape: tuple[int, ...], steps: Collection[int] = (-1, 1)
 
 
 def neighbourhood_graph(
-        grid: npt.NDArray[GridNode], steps: Collection[int] = (-1, 1)
+        grid: npt.NDArray[GridNode], steps: Collection[int] = (-1, 1),
+        mask: GridNode | None = None
 ) -> IGraph[GridNode]:
     """Build neighbourhood graph of *grid*."""
     for pos1, node1 in np.ndenumerate(grid):
         for pos2 in neighbourhood_positions(grid.shape, pos1, steps):
             node2 = grid[pos2]
-            if node1 != node2:
+            is_unmasked = (mask is None) or (node1 != mask and node2 != mask)
+            if is_unmasked and node1 != node2:
                 yield node1, node2

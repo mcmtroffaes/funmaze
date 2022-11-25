@@ -18,7 +18,7 @@ def test_graphviz() -> None:
         grid_replace_nodes(
             itertools.product(range(1, 4), range(1, 4)), room,
             base_grid))
-    graph = frozenset(graph_remove_nodes(neighbourhood_graph(grid), {mask}))
+    graph = frozenset(neighbourhood_graph(grid, mask=mask))
     nodes = frozenset(graph_nodes(graph))
     names = {node: str(node) for node in nodes}
     positions = {
