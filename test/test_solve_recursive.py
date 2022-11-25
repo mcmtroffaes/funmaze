@@ -24,10 +24,10 @@ def test_recursive_2() -> None:
 ])
 def test_recursive_3(shape: tuple[int, ...]) -> None:
     grid = grid_sequential(shape)
-    graph = neighbourhood_graph(grid)
-    maze = generate_backtracking_maze(graph, grid[0, 0])
     start = grid[0, 0]
     end = grid[shape[0] - 1, shape[1] - 1]
+    graph = neighbourhood_graph(grid)
+    maze = generate_backtracking_maze(graph, start)
     solutions = list(solve_recursive(maze, start, end))
     assert len(solutions) == 1  # perfect maze only has one solution
     # for debugging
