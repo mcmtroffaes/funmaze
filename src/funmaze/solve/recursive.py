@@ -15,7 +15,7 @@ def _recursive(
     if start == end:
         yield []
     else:
-        neighbours_start = neighbours[start]
+        neighbours_start: Set[Node] = neighbours.get(start, set())
         good_neighbours = [
             node for node in neighbours_start if node not in visited]
         for node in good_neighbours:

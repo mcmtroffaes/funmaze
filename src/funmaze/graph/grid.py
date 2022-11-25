@@ -1,3 +1,4 @@
+from collections.abc import Collection
 from typing import TypeVar, Iterable
 
 import numpy as np
@@ -24,11 +25,13 @@ def grid_replace_nodes(
     return grid2
 
 
-def neighbourhood_graph(grid: npt.NDArray[GridNode]) -> Graph[GridNode]:
+def neighbourhood_graph(
+        grid: npt.NDArray[GridNode], steps: Collection[int] = (-1, 1)
+) -> Graph[GridNode]:
     """Build neighbourhood graph of *grid*."""
     def _edges():
         for pos1, node1 in np.ndenumerate(grid):
-            for pos2 in neighbourhood_positions(grid.shape, pos1, steps=(1,)):
+            for pos2 in neighbourhood_positions(grid.shape, pos1, steps):
                 node2 = grid[pos2]
                 if node1 != node2:
                     yield node1, node2

@@ -1,4 +1,5 @@
 import itertools
+from collections.abc import Set
 from typing import Iterable, TypeVar
 
 import numpy as np
@@ -10,7 +11,7 @@ from funmaze.graph.grid import GridNode, neighbourhood_positions
 
 def render_bitmap(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
                   ) -> npt.NDArray[np.bool_]:
-    """Render the *graph* of a *grid* as a bitmap,
+    """Render the undirected *graph* of a *grid* as a bitmap,
     with walls in even positions and corridors in odd positions.
 
     Nodes and edges are ``False`` and walls are ``True``.
@@ -22,17 +23,19 @@ def render_bitmap(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
     def _bitmap_pos(grid_pos: tuple[int, ...]) -> tuple[int, ...]:
         return tuple(1 + 2 * i for i in grid_pos)
     # start with walls everywhere
-    bitmap = np.full(_bitmap_pos(grid.shape), True)
-    nodes = graph_nodes(graph)
+    bitmap: npt.NDArray[np.bool_] = np.full(_bitmap_pos(grid.shape), True)
+    nodes: Set[GridNode] = graph_nodes(graph)
     # remove walls at nodes in the graph
     for pos, node in np.ndenumerate(grid):
         if node in nodes:
             bitmap[_bitmap_pos(pos)] = False
     # insert edges
     missing_edges: set[Edge[GridNode]] = set(graph)
+    pos1: tuple[int, ...]
+    node1: GridNode
     for pos1, node1 in np.ndenumerate(grid):
         for pos2 in neighbourhood_positions(grid.shape, pos1, steps=(1,)):
-            node2 = grid[pos2]
+            node2: GridNode = grid[pos2]
             b_pos1 = _bitmap_pos(pos1)
             b_pos2 = _bitmap_pos(pos2)
             e_pos = tuple((i + j) // 2 for i, j in zip(b_pos1, b_pos2))

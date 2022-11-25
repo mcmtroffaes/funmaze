@@ -1,5 +1,5 @@
 import itertools
-from collections.abc import Set
+from collections.abc import Set, Mapping
 from typing import TypeVar, Iterable, Collection
 
 import numpy as np
@@ -19,6 +19,13 @@ def graph_nodes(graph: Graph[Node]) -> Set[Node]:
     return frozenset(itertools.chain.from_iterable(graph))
 
 
+def graph_neighbours(graph: Graph[Node]) -> Mapping[Node, Set[Node]]:
+    neighbours: dict[Node, set[Node]] = {}
+    for node1, node2 in graph:
+        neighbours.setdefault(node1, set()).add(node2)
+    return neighbours
+
+
 def neighbourhood_positions(
         shape: tuple[int, ...], pos: tuple[int, ...],
         steps: Collection[int] = (-1, 1),
@@ -33,11 +40,12 @@ def neighbourhood_positions(
                             for j, x2 in enumerate(pos))
 
 
-def graph_grid(shape: tuple[int, ...]) -> Graph[tuple[int, ...]]:
+def graph_grid(shape: tuple[int, ...], steps: Collection[int] = (-1, 1)
+               ) -> Graph[tuple[int, ...]]:
     """Construct a grid shaped graph."""
     def _edges():
         for pos1 in np.ndindex(*shape):
-            for pos2 in neighbourhood_positions(shape, pos1, steps=(1,)):
+            for pos2 in neighbourhood_positions(shape, pos1, steps):
                 yield pos1, pos2
     return frozenset(_edges())
 
