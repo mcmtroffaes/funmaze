@@ -11,7 +11,7 @@ from funmaze.render.bitmap import render_bitmap
 def test_backtracking_simple():
     grid = grid_sequential((5, 5))
     graph = neighbourhood_graph(grid)
-    maze = generate_backtracking_maze(graph, grid[0, 0])
+    maze = frozenset(generate_backtracking_maze(graph, grid[0, 0]))
     bitmap = render_bitmap(grid, maze).astype(int)
     assert sum(bitmap.flat) == 72  # perfect 5x5 maze has fixed number of walls
     # for debugging:
@@ -29,7 +29,7 @@ def test_backtracking_grid_with_room():
         np.uint(99),
         grid_sequential((9, 9)))
     graph = neighbourhood_graph(grid)
-    maze = generate_backtracking_maze(graph, grid[0, 0])
+    maze = frozenset(generate_backtracking_maze(graph, grid[0, 0]))
     render_bitmap(grid, maze)
     # for debugging:
     # bitmap = render_bitmap(grid, maze)
@@ -44,10 +44,10 @@ def test_backtracking_grid_with_room():
 
 
 def test_backtracking_empty():
-    assert generate_backtracking_maze(set(), 0) == set()
+    assert set(generate_backtracking_maze(set(), 0)) == set()
 
 
 def test_backtracking_large():
     """Larger test to help profiling."""
     graph = graph_grid((100, 100))
-    generate_backtracking_maze(graph, (0, 0))
+    set(generate_backtracking_maze(graph, (0, 0)))

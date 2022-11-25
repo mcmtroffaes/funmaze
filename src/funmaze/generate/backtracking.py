@@ -2,10 +2,11 @@ import random
 from collections.abc import Mapping, Set
 from typing import Iterable
 
-from funmaze.graph import Graph, Node, Edge, graph_neighbours
+from funmaze.graph import IGraph, Node, Edge, graph_neighbours, \
+    graph_undirected
 
 
-def generate_backtracking_tree(graph: Graph[Node], start: Node
+def generate_backtracking_tree(graph: IGraph[Node], start: Node
                                ) -> Iterable[Edge[Node]]:
     """Return a random subgraph of *graph* representing a tree on the graph,
     rooted at *root*, through the recursive backtracker algorithm.
@@ -27,13 +28,10 @@ def generate_backtracking_tree(graph: Graph[Node], start: Node
             stack.append(node2)
 
 
-def generate_backtracking_maze(graph: Graph[Node], start: Node) -> Graph[Node]:
+def generate_backtracking_maze(
+        graph: IGraph[Node], start: Node) -> IGraph[Node]:
     """Return a perfect maze on the graph.
     First, we generate a tree through the recursive backtracker algorithm.
     Then, we complete the maze by adding all reverse edges.
     """
-    maze: set[Edge[Node]] = set()
-    for node1, node2 in generate_backtracking_tree(graph, start):
-        maze.add((node1, node2))
-        maze.add((node2, node1))
-    return maze
+    return graph_undirected(generate_backtracking_tree(graph, start))
