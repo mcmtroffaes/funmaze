@@ -44,6 +44,7 @@ def test_grid_triangles(
 
 
 @pytest.mark.parametrize("ver,hor,graph", [
+    # TODO test these grids
     # 1122
     #  3344
     (2, 2,
