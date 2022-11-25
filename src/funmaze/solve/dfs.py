@@ -1,11 +1,11 @@
 import random
-from collections.abc import Mapping, Set, Iterable
+from collections.abc import Mapping, Set, Iterable, Sequence
 
 from funmaze.graph import IGraph, Node, graph_neighbours
 
 
 def solve_dfs_one(graph: IGraph[Node], start: Node, end: Node
-                  ) -> Iterable[Iterable[Node]]:
+                  ) -> Iterable[Sequence[Node]]:
     """Use the backtracking algorithm for generating trees to find a solution
     to the maze. We do this by returning the stack as soon as the generator
     reaches the end state. This routine will return at most one solution.
