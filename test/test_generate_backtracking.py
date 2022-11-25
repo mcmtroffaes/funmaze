@@ -3,9 +3,8 @@ import itertools
 import numpy as np
 
 from funmaze.generate.backtracking import generate_backtracking
-from funmaze.graph import graph_grid
 from funmaze.graph.grid import grid_sequential, neighbourhood_graph, \
-    grid_replace_nodes
+    grid_replace_nodes, graph_grid
 from funmaze.render.bitmap import render_bitmap
 
 
