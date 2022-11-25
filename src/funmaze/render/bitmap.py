@@ -24,8 +24,8 @@ def render_bitmap(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
         return tuple(1 + 2 * i for i in grid_pos)
     # start with walls everywhere
     bitmap: npt.NDArray[np.bool_] = np.full(_bitmap_pos(grid.shape), True)
-    nodes: Set[GridNode] = graph_nodes(graph)
     # remove walls at nodes in the graph
+    nodes: Set[GridNode] = graph_nodes(graph)
     for pos, node in np.ndenumerate(grid):
         if node in nodes:
             bitmap[_bitmap_pos(pos)] = False
@@ -39,9 +39,8 @@ def render_bitmap(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
             b_pos1 = _bitmap_pos(pos1)
             b_pos2 = _bitmap_pos(pos2)
             e_pos = tuple((i + j) // 2 for i, j in zip(b_pos1, b_pos2))
-            if node1 == node2:
-                if node1 in nodes:
-                    bitmap[e_pos] = False
+            if node1 == node2 and node1 in nodes:
+                bitmap[e_pos] = False
             else:
                 for edge in ((node1, node2), (node2, node1)):
                     if edge in graph:
