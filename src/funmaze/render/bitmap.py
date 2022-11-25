@@ -25,7 +25,7 @@ def render_bitmap(grid: npt.NDArray[GridNode], graph: Graph[GridNode]
     # start with walls everywhere
     bitmap: npt.NDArray[np.bool_] = np.full(_bitmap_pos(grid.shape), True)
     # remove walls at nodes in the graph
-    nodes: Set[GridNode] = graph_nodes(graph)
+    nodes: Set[GridNode] = frozenset(graph_nodes(graph))
     for pos, node in np.ndenumerate(grid):
         if node in nodes:
             bitmap[_bitmap_pos(pos)] = False

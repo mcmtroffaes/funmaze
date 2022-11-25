@@ -16,13 +16,15 @@ IGraph = Iterable[Edge[Node]]
 """Iterable of directed edges (identical edges may appear more than once)."""
 
 
-def graph_nodes(graph: IGraph[Node]) -> Set[Node]:
-    """Set of all nodes of *graph*."""
-    return frozenset(itertools.chain.from_iterable(graph))
+def graph_nodes(graph: IGraph[Node]) -> Iterable[Node]:
+    """Iterate over all nodes of *graph*. May contain duplicates.
+    Wrap the result into a set to get rid of those.
+    """
+    return itertools.chain.from_iterable(graph)
 
 
 def graph_neighbours(graph: IGraph[Node]) -> Mapping[Node, Set[Node]]:
-    """Map each node to its neighbours ("forward star")."""
+    """Find neighbours ("forward star") of every node."""
     neighbours: dict[Node, set[Node]] = {}
     for node1, node2 in graph:
         neighbours.setdefault(node1, set()).add(node2)
@@ -56,8 +58,8 @@ def graph_merge_nodes(
 
 def graph_undirected(graph: IGraph[Node]) -> IGraph[Node]:
     """Convert graph into an undirected graph.
-    Note that in the current implementation, if some edges are already
-    undirected, then they will appear more than once in the resulting iterable.
+    Edges may appear more than once in the resulting iterable.
+    Wrap the result into a set if you need to get rid of those.
     """
     for node1, node2 in graph:
         yield node1, node2

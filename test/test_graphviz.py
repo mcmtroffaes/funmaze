@@ -18,7 +18,7 @@ def test_graphviz() -> None:
             np.uint(8),
             grid_sequential((7, 7))))
     graph = set(graph_remove_nodes(neighbourhood_graph(grid), {np.uint(99)}))
-    nodes = graph_nodes(graph)
+    nodes = frozenset(graph_nodes(graph))
     names = {node: str(node) for node in nodes}
     positions = {
         node: (pos[1], -pos[0]) for pos, node in np.ndenumerate(grid)}
@@ -36,8 +36,8 @@ def test_graphviz() -> None:
 
 def test_graphviz_2(tmp_path) -> None:
     grid = grid_sequential((2, 2))
-    graph = set(neighbourhood_graph(grid))
-    nodes = graph_nodes(graph)
+    graph = frozenset(neighbourhood_graph(grid))
+    nodes = frozenset(graph_nodes(graph))
     names = {node: "oops" for node in nodes}
     with pytest.raises(ValueError):  # names not unique
         render_graphviz(graph, names)

@@ -17,7 +17,7 @@ def render_graphviz(
         raise ValueError("names must be unique")
     gv = graphviz.Graph(strict=True, engine=engine, format=fmt)
     if positions is not None:
-        for node in graph_nodes(graph):
+        for node in frozenset(graph_nodes(graph)):
             pos = positions[node]
             name = names[node]
             gv.node(name, pos=f"{pos[0]},{pos[1]}!")

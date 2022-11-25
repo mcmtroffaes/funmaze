@@ -4,7 +4,7 @@ from typing import TypeVar, Iterable
 import numpy as np
 import numpy.typing as npt
 
-from funmaze.graph import Graph, IGraph
+from funmaze.graph import IGraph
 
 GridNode = TypeVar("GridNode", bound=np.generic)
 
