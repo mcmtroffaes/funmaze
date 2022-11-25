@@ -10,13 +10,14 @@ from funmaze.render.graphviz import render_graphviz
 
 
 def test_graphviz() -> None:
-    room = np.uint(8)
-    mask = np.uint(99)
+    base_grid = grid_sequential((7, 7))
+    room = base_grid[2, 2]
+    mask = base_grid[4, 4]
     grid = grid_replace_nodes(
         itertools.product(range(3, 5), range(3, 5)), mask,
         grid_replace_nodes(
             itertools.product(range(1, 4), range(1, 4)), room,
-            grid_sequential((7, 7))))
+            base_grid))
     graph = frozenset(graph_remove_nodes(neighbourhood_graph(grid), {mask}))
     nodes = frozenset(graph_nodes(graph))
     names = {node: str(node) for node in nodes}
