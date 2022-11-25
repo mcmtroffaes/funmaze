@@ -24,11 +24,12 @@ def grid_triangles(num_ver: int, num_hor: int
     A triangular topology is one where every node is connected to
     three other nodes (except on the edge of the graph)::
 
-      :   AAA BBB CCC
-      : DDD EEE FFF GGG
-      : HHH III JJJ KKK
-      :   LLL MMM NNN
+      __AAA_BBB_CCC__
+      DDD_EEE_FFF_GGG
+      HHH_III_JJJ_KKK
+      __LLL_MMM_NNN__
     """
+    # TODO improve implementation
     grid = np.full((num_ver, num_hor * 4 - 1), 0, dtype=np.int_)
     value = 1
     for i in range(num_ver):
@@ -40,6 +41,30 @@ def grid_triangles(num_ver: int, num_hor: int
             for j in range(num_hor):
                 grid[i, slice(j * 4, 3 + j * 4)] = value
                 value += 1
+    return grid, np.int_(0)
+
+
+def grid_hexagons(num_ver: int, num_hor: int
+                  ) -> tuple[npt.NDArray[np.int_], np.int_]:
+    """Return a two-dimensional grid matching a hexagonal topology.
+    The node for the mask (which must be ignored when building the
+    neighbourhood graph) is returned as well.
+
+    A hexagonal topology is one where every node is connected to
+    six other nodes (except on the edge of the graph)::
+
+      AABBCC_
+      _DDEEFF
+      HHIIJJ_
+      _LLMMNN
+    """
+    grid = np.full((num_ver, num_hor * 2 + 1), 0, dtype=np.int_)
+    value = 1
+    for i in range(num_ver):
+        for j in range(num_hor):
+            k = 2 * j + i % 2
+            grid[i, slice(k, k + 2)] = value
+            value += 1
     return grid, np.int_(0)
 
 
