@@ -17,7 +17,7 @@ def test_graphviz() -> None:
             itertools.product(range(1, 4), range(1, 4)),
             np.uint(8),
             grid_sequential((7, 7))))
-    graph = graph_remove_nodes(neighbourhood_graph(grid), {np.uint(99)})
+    graph = set(graph_remove_nodes(neighbourhood_graph(grid), {np.uint(99)}))
     nodes = graph_nodes(graph)
     names = {node: str(node) for node in nodes}
     positions = {

@@ -1,6 +1,6 @@
 import itertools
 from collections.abc import Set, Mapping
-from typing import TypeVar
+from typing import TypeVar, Iterable
 
 Node = TypeVar("Node")
 
@@ -12,12 +12,16 @@ Graph = Set[Edge[Node]]
 """Set of directed edges."""
 
 
-def graph_nodes(graph: Graph[Node]) -> Set[Node]:
+IGraph = Iterable[Edge[Node]]
+"""Iterable of directed edges."""
+
+
+def graph_nodes(graph: IGraph[Node]) -> Set[Node]:
     """Set of all nodes of *graph*."""
     return frozenset(itertools.chain.from_iterable(graph))
 
 
-def graph_neighbours(graph: Graph[Node]) -> Mapping[Node, Set[Node]]:
+def graph_neighbours(graph: IGraph[Node]) -> Mapping[Node, Set[Node]]:
     """Map each node to its neighbours ("forward star")."""
     neighbours: dict[Node, set[Node]] = {}
     for node1, node2 in graph:
@@ -25,16 +29,15 @@ def graph_neighbours(graph: Graph[Node]) -> Mapping[Node, Set[Node]]:
     return neighbours
 
 
-def graph_remove_nodes(graph: Graph, nodes: Set[Node]) -> Graph[Node]:
+def graph_remove_nodes(graph: IGraph, nodes: Set[Node]) -> IGraph[Node]:
     """Remove *nodes* from *graph*."""
-    return frozenset(
+    return (
         edge for edge in graph if all(node not in nodes for node in edge))
 
 
 def graph_merge_nodes(
-        graph: Graph, nodes: Set[Node], target: Node) -> Graph[Node]:
-    """Remove and merge *nodes* from *graph* into a *target* node.
-    """
+        graph: IGraph, nodes: Set[Node], target: Node) -> IGraph[Node]:
+    """Remove and merge *nodes* from *graph* into a *target* node."""
     def _update(edge: Edge[Node]) -> Edge[Node]:
         node1, node2 = edge
         if node1 not in nodes:
@@ -47,5 +50,15 @@ def graph_merge_nodes(
                 return target, node2
             else:
                 return target, target
-    return frozenset(
+    return (
         edge2 for edge in graph if (edge2 := _update(edge)) is not None)
+
+
+def graph_undirected(graph: IGraph[Node]) -> IGraph[Node]:
+    """Convert graph into an undirected graph.
+    Note that in the current implementation, if some edges are already
+    undirected, then they will appear more than once in the resulting iterable.
+    """
+    for node1, node2 in graph:
+        yield node1, node2
+        yield node2, node1
