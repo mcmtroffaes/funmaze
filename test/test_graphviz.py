@@ -10,26 +10,26 @@ from funmaze.render.graphviz import render_graphviz
 
 
 def test_graphviz() -> None:
+    room = np.uint(8)
+    mask = np.uint(99)
     grid = grid_replace_nodes(
-        itertools.product(range(3, 5), range(3, 5)),
-        np.uint(99),
+        itertools.product(range(3, 5), range(3, 5)), mask,
         grid_replace_nodes(
-            itertools.product(range(1, 4), range(1, 4)),
-            np.uint(8),
+            itertools.product(range(1, 4), range(1, 4)), room,
             grid_sequential((7, 7))))
-    graph = set(graph_remove_nodes(neighbourhood_graph(grid), {np.uint(99)}))
+    graph = frozenset(graph_remove_nodes(neighbourhood_graph(grid), {mask}))
     nodes = frozenset(graph_nodes(graph))
     names = {node: str(node) for node in nodes}
     positions = {
         node: (pos[1], -pos[0]) for pos, node in np.ndenumerate(grid)}
     gv = render_graphviz(graph, names, positions)
     assert '0 [pos="0,0!"]' in gv.source
-    assert '0 -- 1' in gv.source
+    assert '0 -> 1' in gv.source
     # for debugging:
     # gv.render("gv", view=True)
     gv2 = render_graphviz(graph, names)
     assert '0 [pos="0,0!"]' not in gv2.source
-    assert '0 -- 1' in gv2.source
+    assert '0 -> 1' in gv2.source
     # for debugging:
     # gv2.render("gv2", view=True)
 

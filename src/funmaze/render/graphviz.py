@@ -11,11 +11,11 @@ def render_graphviz(
         positions: Mapping[Node, tuple[float, float]] | None = None,
         engine: str = 'neato',
         fmt: str = 'pdf',
-) -> graphviz.Graph:
+) -> graphviz.Digraph:
     # note: default engine set to 'neato' to support node positions
     if len(frozenset(names.values())) != len(names):
         raise ValueError("names must be unique")
-    gv = graphviz.Graph(strict=True, engine=engine, format=fmt)
+    gv = graphviz.Digraph(strict=True, engine=engine, format=fmt)
     if positions is not None:
         for node in frozenset(graph_nodes(graph)):
             pos = positions[node]
