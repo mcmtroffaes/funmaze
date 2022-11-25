@@ -18,6 +18,7 @@ def graph_nodes(graph: Graph[Node]) -> Set[Node]:
 
 
 def graph_neighbours(graph: Graph[Node]) -> Mapping[Node, Set[Node]]:
+    """Map each node to its neighbours ("forward star")."""
     neighbours: dict[Node, set[Node]] = {}
     for node1, node2 in graph:
         neighbours.setdefault(node1, set()).add(node2)
