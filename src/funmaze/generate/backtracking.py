@@ -22,6 +22,7 @@ def generate_backtracking(graph: Graph[Node]) -> Graph[Node]:
                 stack.append(node)
                 node2 = random.choice(good_neighbours)
                 maze.add((node, node2))
+                maze.add((node2, node))
                 visited.add(node2)
                 stack.append(node2)
     return maze

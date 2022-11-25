@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from funmaze.generate.backtracking import generate_backtracking
 from funmaze.graph import Graph
@@ -26,12 +27,16 @@ def test_backtracking_2() -> None:
     }
 
 
-def test_backtracking_3() -> None:
-    return
-    grid = grid_sequential((10, 10))
+@pytest.mark.parametrize("shape", [
+    (2, 2), (5, 5), (2, 5), (5, 2), (10, 10), (50, 100), (200, 20)
+])
+def test_backtracking_3(shape: tuple[int, ...]) -> None:
+    grid = grid_sequential(shape)
     graph = neighbourhood_graph(grid)
     maze = generate_backtracking(graph)
-    solutions = list(solve_backtracking(maze, np.uint(0), np.uint(99)))
+    start = np.uint(0)
+    end = grid.max(initial=start)
+    solutions = list(solve_backtracking(maze, start, end))
     assert len(solutions) == 1  # perfect maze only has one solution
     # for debugging
     # from funmaze.render.bitmap import render_bitmap
