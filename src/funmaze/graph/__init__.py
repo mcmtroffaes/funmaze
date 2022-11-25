@@ -13,7 +13,7 @@ Graph = Set[Edge[Node]]
 
 
 IGraph = Iterable[Edge[Node]]
-"""Iterable of directed edges."""
+"""Iterable of directed edges (identical edges may appear more than once)."""
 
 
 def graph_nodes(graph: IGraph[Node]) -> Set[Node]:
