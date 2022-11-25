@@ -8,22 +8,16 @@ from funmaze.solve.backtracking import solve_backtracking
 
 def test_backtracking_1() -> None:
     maze: Graph[int] = {(0, 1), (1, 2), (0, 2)}
-    sols = list(frozenset(sol) for sol in solve_backtracking(maze, 0, 2))
+    sols = list(tuple(sol) for sol in solve_backtracking(maze, 0, 2))
     assert len(sols) == 1
-    assert sols[0] in {
-        frozenset([(0, 1), (1, 2)]),
-        frozenset([(0, 2)]),
-    }
+    assert sols[0] in {(0, 1, 2), (0, 2)}
 
 
 def test_backtracking_2() -> None:
     maze: Graph[int] = {(0, 1), (1, 2), (0, 3), (3, 2)}
-    sols = list(frozenset(sol) for sol in solve_backtracking(maze, 0, 2))
+    sols = list(tuple(sol) for sol in solve_backtracking(maze, 0, 2))
     assert len(sols) == 1
-    assert sols[0] in {
-        frozenset([(0, 1), (1, 2)]),
-        frozenset([(0, 3), (3, 2)]),
-    }
+    assert sols[0] in {(0, 1, 2), (0, 3, 2)}
 
 
 @pytest.mark.parametrize("shape", [

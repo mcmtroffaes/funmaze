@@ -1,12 +1,12 @@
 import random
 from collections.abc import Iterable
 
-from funmaze.graph import IGraph, Node, Edge, graph_neighbours
+from funmaze.graph import IGraph, Node, graph_neighbours
 
 
 def solve_backtracking(graph: IGraph[Node], start: Node, end: Node
-                       ) -> Iterable[Iterable[Edge]]:
-    """Use the backtracking algorithm for generating mazes to solve
+                       ) -> Iterable[Iterable[Node]]:
+    """Use the backtracking algorithm for generating trees to solve
     the maze. We do this by returning the stack as soon as the generator
     reaches the end state. This routine will return at most one solution.
     """
@@ -22,4 +22,4 @@ def solve_backtracking(graph: IGraph[Node], start: Node, end: Node
             node2 = random.choice(good_neighbours)
             visited.add(node2)
             stack.append(node2)
-    return [zip(stack[:-1], stack[1:])] if stack else []
+    return [stack] if stack else []
