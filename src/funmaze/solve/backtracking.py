@@ -1,5 +1,5 @@
 import random
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping, Set
 
 from funmaze.graph import IGraph, Node, graph_neighbours
 
@@ -10,7 +10,7 @@ def solve_backtracking(graph: IGraph[Node], start: Node, end: Node
     the maze. We do this by returning the stack as soon as the generator
     reaches the end state. This routine will return at most one solution.
     """
-    neighbours = graph_neighbours(graph)
+    neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
     stack: list[Node] = [start]
     visited: set[Node] = {start}
     while stack and stack[-1] != end:

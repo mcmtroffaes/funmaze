@@ -14,8 +14,8 @@ def generate_backtracking_tree(graph: IGraph[Node], start: Node
     that contains *root*.
     """
     neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
-    visited: set[Node] = {start}
     stack: list[Node] = [start]
+    visited: set[Node] = {start}
     while stack:
         node = stack.pop()
         if good_neighbours := [
@@ -23,9 +23,9 @@ def generate_backtracking_tree(graph: IGraph[Node], start: Node
                 if node2 not in visited]:
             stack.append(node)
             node2 = random.choice(good_neighbours)
-            yield node, node2
             visited.add(node2)
             stack.append(node2)
+            yield node, node2
 
 
 def generate_backtracking_maze(
