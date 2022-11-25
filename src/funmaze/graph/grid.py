@@ -15,6 +15,34 @@ def grid_squares(shape: tuple[int, ...]) -> npt.NDArray[np.int_]:
     return seq.reshape(shape)
 
 
+def grid_triangles(num_ver: int, num_hor: int
+                   ) -> tuple[npt.NDArray[np.int_], np.int_]:
+    """Return a two-dimensional grid matching a triangular topology.
+    The node for the mask (which must be ignored when building the
+    neighbourhood graph) is returned as well.
+
+    A triangular topology is one where every node is connected to
+    three other nodes (except on the edge of the graph)::
+
+      :   AAA BBB CCC
+      : DDD EEE FFF GGG
+      : HHH III JJJ KKK
+      :   LLL MMM NNN
+    """
+    grid = np.full((num_ver, num_hor * 4 - 1), 0, dtype=np.int_)
+    value = 1
+    for i in range(num_ver):
+        if i % 3 == 0:
+            for j in range(num_hor - 1):
+                grid[i, slice(2 + j * 4, 5 + j * 4)] = value
+                value += 1
+        else:
+            for j in range(num_hor):
+                grid[i, slice(j * 4, 3 + j * 4)] = value
+                value += 1
+    return grid, np.int_(0)
+
+
 def grid_replace_nodes(
         positions: Iterable[tuple[int, ...]],
         node: GridNode,
