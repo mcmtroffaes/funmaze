@@ -19,9 +19,9 @@ def solve_bfs_all(graph: IGraph[Node], start: Node, end: Node
     between two nodes.
     """
     neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
-    solutions: list[Node] = [[start]]
+    solutions: list[list[Node]] = [[start]]
     while solutions:
-        solutions2 = []
+        solutions2: list[list[Node]] = []
         for solution in solutions:
             node = solution[-1]
             if node == end:
