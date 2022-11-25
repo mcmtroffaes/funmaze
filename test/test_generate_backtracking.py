@@ -47,6 +47,11 @@ def test_backtracking_empty():
     assert set(generate_backtracking_maze(set(), 0)) == set()
 
 
+def test_backtracking_3d():
+    graph = graph_grid((3, 3, 3))
+    set(generate_backtracking_maze(graph, (0, 0)))
+
+
 def test_backtracking_large():
     """Larger test to help profiling."""
     graph = graph_grid((100, 100))
