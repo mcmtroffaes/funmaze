@@ -34,10 +34,8 @@ def test_graphviz() -> None:
     # gv2.render("gv2", view=True)
 
 
-def test_graphviz_2(tmp_path) -> None:
-    grid = grid_sequential((2, 2))
-    graph = frozenset(neighbourhood_graph(grid))
-    nodes = frozenset(graph_nodes(graph))
-    names = {node: "oops" for node in nodes}
+def test_graphviz_2() -> None:
+    graph = {(0, 1)}
+    names = {0: "oops", 1: "oops"}
     with pytest.raises(ValueError):  # names not unique
         render_graphviz(graph, names)
