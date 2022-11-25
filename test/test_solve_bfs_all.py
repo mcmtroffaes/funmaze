@@ -4,18 +4,18 @@ import pytest
 from funmaze.generate.backtracking import generate_backtracking_maze
 from funmaze.graph import Graph
 from funmaze.graph.grid import grid_sequential, neighbourhood_graph
-from funmaze.solve.recursive import solve_recursive
+from funmaze.solve.bfs import solve_bfs_all
 
 
 def test_recursive_1() -> None:
     maze: Graph[int] = {(0, 1), (1, 2), (0, 2)}
-    sols = {tuple(sol) for sol in solve_recursive(maze, 0, 2)}
+    sols = {tuple(sol) for sol in solve_bfs_all(maze, 0, 2)}
     assert sols == {(0, 1, 2), (0, 2)}
 
 
 def test_recursive_2() -> None:
     maze: Graph[int] = {(0, 1), (1, 2), (0, 3), (3, 2)}
-    sols = {tuple(sol) for sol in solve_recursive(maze, 0, 2)}
+    sols = {tuple(sol) for sol in solve_bfs_all(maze, 0, 2)}
     assert sols == {(0, 1, 2), (0, 3, 2)}
 
 
@@ -28,7 +28,7 @@ def test_recursive_3(shape: tuple[int, ...]) -> None:
     end = grid[shape[0] - 1, shape[1] - 1]
     graph = neighbourhood_graph(grid)
     maze = set(generate_backtracking_maze(graph, start))
-    solutions = list(solve_recursive(maze, start, end))
+    solutions = list(solve_bfs_all(maze, start, end))
     assert len(solutions) == 1  # perfect maze only has one solution
     # for debugging
     # from funmaze.render.bitmap import render_bitmap
@@ -39,5 +39,5 @@ def test_recursive_3(shape: tuple[int, ...]) -> None:
 
 def test_recursive_4() -> None:
     maze: Graph[int] = {(0, 1), (1, 2), (2, 3), (4, 5)}
-    sols = list(solve_recursive(maze, 0, 5))
+    sols = list(solve_bfs_all(maze, 0, 5))
     assert not sols
