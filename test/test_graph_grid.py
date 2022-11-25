@@ -2,7 +2,7 @@ from collections.abc import Set
 
 import pytest
 
-from funmaze.graph.grid import grid_sequential, neighbourhood_graph
+from funmaze.graph.grid import grid_squares, neighbourhood_graph
 
 
 @pytest.mark.parametrize("shape,graph", [
@@ -15,5 +15,5 @@ from funmaze.graph.grid import grid_sequential, neighbourhood_graph
 ])
 def test_grid_neighbourhood_graph(
         shape: tuple[int, ...], graph: Set[tuple[int, int]]) -> None:
-    grid = grid_sequential(shape)
+    grid = grid_squares(shape)
     assert frozenset(neighbourhood_graph(grid, steps=(1,))) == graph

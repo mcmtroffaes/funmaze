@@ -1,11 +1,11 @@
 import numpy as np
 
 from funmaze.graph import Graph, graph_merge_nodes, graph_remove_nodes
-from funmaze.graph.grid import grid_sequential, neighbourhood_graph
+from funmaze.graph.grid import grid_squares, neighbourhood_graph
 
 
 def test_graph_remove_nodes() -> None:
-    grid = grid_sequential((4, 4))
+    grid = grid_squares((4, 4))
     graph = neighbourhood_graph(grid, steps=(1,))
     rec = {np.uint(i) for i in [5, 6, 7, 9, 10, 11, 13, 14, 15]}
     graph2 = set(graph_remove_nodes(graph, rec))
@@ -20,7 +20,7 @@ def test_graph_remove_nodes() -> None:
 
 
 def test_graph_merge_nodes() -> None:
-    grid = grid_sequential((4, 4))
+    grid = grid_squares((4, 4))
     graph = neighbourhood_graph(grid, steps=(1,))
     rec = {np.uint(i) for i in [5, 6, 7, 9, 10, 11, 13, 14, 15]}
     graph2 = set(graph_merge_nodes(graph, rec, np.uint(10)))

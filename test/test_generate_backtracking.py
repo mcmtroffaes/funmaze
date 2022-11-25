@@ -3,13 +3,13 @@ import itertools
 import numpy as np
 
 from funmaze.generate.backtracking import generate_backtracking_maze
-from funmaze.graph.grid import grid_sequential, neighbourhood_graph, \
+from funmaze.graph.grid import grid_squares, neighbourhood_graph, \
     grid_replace_nodes, graph_grid
 from funmaze.render.bitmap import render_bitmap
 
 
 def test_backtracking_simple():
-    grid = grid_sequential((5, 5))
+    grid = grid_squares((5, 5))
     graph = neighbourhood_graph(grid)
     maze = frozenset(generate_backtracking_maze(graph, grid[0, 0]))
     bitmap = render_bitmap(grid, maze).astype(int)
@@ -27,7 +27,7 @@ def test_backtracking_grid_with_room():
     grid = grid_replace_nodes(
         itertools.product(range(3, 6), range(3, 6)),
         np.uint(99),
-        grid_sequential((9, 9)))
+        grid_squares((9, 9)))
     graph = neighbourhood_graph(grid)
     maze = frozenset(generate_backtracking_maze(graph, grid[0, 0]))
     render_bitmap(grid, maze)

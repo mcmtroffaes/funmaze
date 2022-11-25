@@ -9,7 +9,8 @@ from funmaze.graph import IGraph
 GridNode = TypeVar("GridNode", bound=np.generic)
 
 
-def grid_sequential(shape: tuple[int, ...]) -> npt.NDArray[np.int_]:
+def grid_squares(shape: tuple[int, ...]) -> npt.NDArray[np.int_]:
+    """Create grid containing equally sized square nodes."""
     seq = np.arange(0, np.product(shape), dtype=np.int_)
     return seq.reshape(shape)
 

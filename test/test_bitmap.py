@@ -2,13 +2,13 @@ import numpy as np
 import pytest
 
 from funmaze.graph import Graph
-from funmaze.graph.grid import grid_sequential, neighbourhood_graph
+from funmaze.graph.grid import grid_squares, neighbourhood_graph
 from funmaze.render.bitmap import render_bitmap, bitmap_remove_dots, \
     bitmap_scale
 
 
 def test_bitmap_1() -> None:
-    grid = grid_sequential((2, 2))
+    grid = grid_squares((2, 2))
     graph = set(neighbourhood_graph(grid))
     bitmap = render_bitmap(grid, graph)
     np.testing.assert_array_equal(bitmap, np.array([
@@ -28,7 +28,7 @@ def test_bitmap_1() -> None:
 
 
 def test_bitmap_2() -> None:
-    grid = grid_sequential((3, 3))
+    grid = grid_squares((3, 3))
     graph: Graph[np.uint] = {(np.uint(0), np.uint(2))}  # not neighbours
     with pytest.raises(ValueError, match="not neighbours"):
         render_bitmap(grid, graph)

@@ -4,13 +4,13 @@ import numpy as np
 import pytest
 
 from funmaze.graph import graph_remove_nodes, graph_nodes
-from funmaze.graph.grid import grid_replace_nodes, grid_sequential, \
+from funmaze.graph.grid import grid_replace_nodes, grid_squares, \
     neighbourhood_graph
 from funmaze.render.graphviz import render_graphviz
 
 
 def test_graphviz() -> None:
-    base_grid = grid_sequential((7, 7))
+    base_grid = grid_squares((7, 7))
     room = base_grid[2, 2]
     mask = base_grid[4, 4]
     grid = grid_replace_nodes(

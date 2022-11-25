@@ -2,7 +2,7 @@ import pytest
 
 from funmaze.generate.backtracking import generate_backtracking_maze
 from funmaze.graph import Graph
-from funmaze.graph.grid import grid_sequential, neighbourhood_graph
+from funmaze.graph.grid import grid_squares, neighbourhood_graph
 from funmaze.solve.dfs import solve_dfs_one
 
 
@@ -24,7 +24,7 @@ def test_backtracking_2() -> None:
     (2, 2), (5, 5), (2, 5), (5, 2), (10, 10), (50, 100), (200, 20)
 ])
 def test_backtracking_3(shape: tuple[int, ...]) -> None:
-    grid = grid_sequential(shape)
+    grid = grid_squares(shape)
     start = grid[0, 0]
     end = grid[shape[0] - 1, shape[1] - 1]
     graph = neighbourhood_graph(grid)

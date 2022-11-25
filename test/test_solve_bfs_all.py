@@ -2,7 +2,7 @@ import pytest
 
 from funmaze.generate.backtracking import generate_backtracking_maze
 from funmaze.graph import Graph
-from funmaze.graph.grid import grid_sequential, neighbourhood_graph
+from funmaze.graph.grid import grid_squares, neighbourhood_graph
 from funmaze.solve.bfs import solve_bfs_all
 
 
@@ -22,7 +22,7 @@ def test_bfs_all_2() -> None:
     (2, 2), (5, 5), (2, 5), (5, 2), (10, 10),
 ])
 def test_bfs_all_3(shape: tuple[int, ...]) -> None:
-    grid = grid_sequential(shape)
+    grid = grid_squares(shape)
     start = grid[0, 0]
     end = grid[shape[0] - 1, shape[1] - 1]
     graph = neighbourhood_graph(grid)
