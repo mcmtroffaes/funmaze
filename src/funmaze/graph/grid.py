@@ -58,6 +58,7 @@ def grid_hexagons(num_ver: int, num_hor: int
       HHIIJJ_
       _LLMMNN
     """
+    # TODO improve implementation
     grid = np.full((num_ver, num_hor * 2 + 1), 0, dtype=np.int_)
     value = 1
     for i in range(num_ver):
