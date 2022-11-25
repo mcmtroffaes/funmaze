@@ -36,7 +36,7 @@ def test_graphviz() -> None:
 
 def test_graphviz_2(tmp_path) -> None:
     grid = grid_sequential((2, 2))
-    graph = neighbourhood_graph(grid)
+    graph = set(neighbourhood_graph(grid))
     nodes = graph_nodes(graph)
     names = {node: "oops" for node in nodes}
     with pytest.raises(ValueError):  # names not unique

@@ -16,4 +16,4 @@ from funmaze.graph.grid import grid_sequential, neighbourhood_graph
 def test_grid_neighbourhood_graph(
         shape: tuple[int, ...], graph: Set[tuple[int, int]]) -> None:
     grid = grid_sequential(shape)
-    assert neighbourhood_graph(grid, steps=(1,)) == graph
+    assert frozenset(neighbourhood_graph(grid, steps=(1,))) == graph

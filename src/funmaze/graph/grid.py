@@ -4,7 +4,7 @@ from typing import TypeVar, Iterable
 import numpy as np
 import numpy.typing as npt
 
-from funmaze.graph import Graph
+from funmaze.graph import Graph, IGraph
 
 GridNode = TypeVar("GridNode", bound=np.generic)
 
@@ -40,23 +40,19 @@ def neighbourhood_positions(
 
 
 def graph_grid(shape: tuple[int, ...], steps: Collection[int] = (-1, 1)
-               ) -> Graph[tuple[int, ...]]:
+               ) -> IGraph[tuple[int, ...]]:
     """Construct a grid shaped graph."""
-    def _edges():
-        for pos1 in np.ndindex(*shape):
-            for pos2 in neighbourhood_positions(shape, pos1, steps):
-                yield pos1, pos2
-    return frozenset(_edges())
+    for pos1 in np.ndindex(*shape):
+        for pos2 in neighbourhood_positions(shape, pos1, steps):
+            yield pos1, pos2
 
 
 def neighbourhood_graph(
         grid: npt.NDArray[GridNode], steps: Collection[int] = (-1, 1)
-) -> Graph[GridNode]:
+) -> IGraph[GridNode]:
     """Build neighbourhood graph of *grid*."""
-    def _edges():
-        for pos1, node1 in np.ndenumerate(grid):
-            for pos2 in neighbourhood_positions(grid.shape, pos1, steps):
-                node2 = grid[pos2]
-                if node1 != node2:
-                    yield node1, node2
-    return frozenset(_edges())
+    for pos1, node1 in np.ndenumerate(grid):
+        for pos2 in neighbourhood_positions(grid.shape, pos1, steps):
+            node2 = grid[pos2]
+            if node1 != node2:
+                yield node1, node2

@@ -1,4 +1,3 @@
-import numpy as np
 import pytest
 
 from funmaze.generate.backtracking import generate_backtracking_maze

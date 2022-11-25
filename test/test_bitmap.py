@@ -9,7 +9,7 @@ from funmaze.render.bitmap import render_bitmap, bitmap_remove_dots, \
 
 def test_bitmap_1() -> None:
     grid = grid_sequential((2, 2))
-    graph = neighbourhood_graph(grid)
+    graph = set(neighbourhood_graph(grid))
     bitmap = render_bitmap(grid, graph)
     np.testing.assert_array_equal(bitmap, np.array([
         [1, 1, 1, 1, 1],
@@ -36,7 +36,7 @@ def test_bitmap_2() -> None:
 
 def test_bitmap_3() -> None:
     grid = np.array([[0, 1, 1]])
-    graph = neighbourhood_graph(grid)
+    graph = set(neighbourhood_graph(grid))
     bitmap = render_bitmap(grid, graph)
     np.testing.assert_array_equal(bitmap, np.array([
         [1, 1, 1, 1, 1, 1, 1],
