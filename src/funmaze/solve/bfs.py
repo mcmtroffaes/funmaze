@@ -1,4 +1,3 @@
-import random
 from collections.abc import Iterable, Mapping, Set
 
 from funmaze.graph import IGraph, Node, graph_neighbours
