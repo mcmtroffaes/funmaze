@@ -1,5 +1,5 @@
-from collections.abc import Collection
-from typing import TypeVar, Iterable
+from collections.abc import Collection, Iterable
+from typing import TypeVar
 
 import numpy as np
 import numpy.typing as npt

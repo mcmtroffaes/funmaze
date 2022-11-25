@@ -1,6 +1,5 @@
 import random
-from collections.abc import Mapping, Set
-from typing import Iterable
+from collections.abc import Mapping, Set, Iterable
 
 from funmaze.graph import IGraph, Node, Edge, graph_neighbours, \
     graph_undirected

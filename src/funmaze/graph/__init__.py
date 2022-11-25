@@ -1,6 +1,6 @@
 import itertools
-from collections.abc import Set, Mapping
-from typing import TypeVar, Iterable
+from collections.abc import Set, Mapping, Iterable
+from typing import TypeVar
 
 Node = TypeVar("Node")
 

@@ -1,6 +1,6 @@
 import itertools
-from collections.abc import Set
-from typing import Iterable, TypeVar
+from collections.abc import Set, Iterable
+from typing import TypeVar
 
 import numpy as np
 import numpy.typing as npt
