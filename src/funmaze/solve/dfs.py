@@ -4,12 +4,11 @@ from collections.abc import Mapping, Set, Iterable
 from funmaze.graph import IGraph, Node, graph_neighbours
 
 
-def solve_backtracking(graph: IGraph[Node], start: Node, end: Node
-                       ) -> Iterable[Iterable[Node]]:
-    """Use the backtracking algorithm for generating trees to solve
-    the maze. We do this by returning the stack as soon as the generator
+def solve_dfs_one(graph: IGraph[Node], start: Node, end: Node
+                  ) -> Iterable[Iterable[Node]]:
+    """Use the backtracking algorithm for generating trees to find a solution
+    to the maze. We do this by returning the stack as soon as the generator
     reaches the end state. This routine will return at most one solution.
-    In essence, this performs a depth-first-search on the graph.
     """
     neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
     stack: list[Node] = [start]
