@@ -3,16 +3,18 @@
 import random
 from collections.abc import Mapping, Set
 
-from funmaze.graph import IGraph, Node, graph_neighbours, \
-    graph_undirected
+from funmaze.graph import IGraph, Node, graph_neighbours, graph_undirected
 
 
-def generate_backtracking_tree(graph: IGraph[Node], start: Node
-                               ) -> IGraph[Node]:
-    """Return a random subgraph of *graph* representing a tree on the graph,
-    rooted at *root*, through the recursive backtracker algorithm.
-    The tree will be a spanning tree of the connected component of the graph
-    that contains *root*.
+def generate_dfs_tree(graph: IGraph[Node], start: Node
+                      ) -> IGraph[Node]:
+    """Return a random out-tree on *graph* rooted at *root*,
+    through depth-first-search.
+
+    The out-tree will be a spanning tree of the connected component
+    of the graph that contains *root*.
+
+    This algorithm is also known as the recursive backtracker.
     """
     neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
     stack: list[Node] = [start]
@@ -29,10 +31,10 @@ def generate_backtracking_tree(graph: IGraph[Node], start: Node
             yield node, node2
 
 
-def generate_backtracking_maze(
+def generate_dfs_maze(
         graph: IGraph[Node], start: Node) -> IGraph[Node]:
     """Return a perfect maze on the graph.
     First, we generate a tree through the recursive backtracker algorithm.
     Then, we complete the maze by adding all reverse edges.
     """
-    return graph_undirected(generate_backtracking_tree(graph, start))
+    return graph_undirected(generate_dfs_tree(graph, start))

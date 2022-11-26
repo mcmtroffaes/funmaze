@@ -1,6 +1,6 @@
 import pytest
 
-from funmaze.generate.backtracking import generate_backtracking_maze
+from funmaze.generate.dfs import generate_dfs_maze
 from funmaze.graph import Graph
 from funmaze.graph.grid import grid_squares, neighbourhood_graph
 from funmaze.solve.bfs import solve_bfs_all, solve_bfs_one_shortest, \
@@ -56,7 +56,7 @@ def test_bfs_all_4(shape: tuple[int, ...]) -> None:
     start = grid[0, 0]
     end = grid[shape[0] - 1, shape[1] - 1]
     graph = neighbourhood_graph(grid)
-    maze = set(generate_backtracking_maze(graph, start))
+    maze = set(generate_dfs_maze(graph, start))
     # perfect maze has only one solution
     sols1 = list(solve_bfs_all(maze, start, end))
     assert len(sols1) == 1
