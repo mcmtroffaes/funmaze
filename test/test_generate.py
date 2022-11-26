@@ -50,22 +50,19 @@ def test_generate_grid_with_room():
     # render_graphviz(maze2, names, positions).render(view=True)
 
 
-def test_backtracking_empty():
+def test_generate_empty():
     assert set(generate_backtracking_maze(set(), 0)) == set()
+    assert set(generate_wilson_maze(set())) == set()
 
 
-def test_backtracking_3d():
-    graph = graph_grid((3, 3, 3))
+def test_generate_3d():
+    graph = frozenset(graph_grid((3, 3, 3)))
     set(generate_backtracking_maze(graph, (0, 0)))
+    set(generate_wilson_maze(graph))
 
 
-def test_backtracking_large():
+def test_generate_large():
     """Larger test to help profiling."""
-    graph = graph_grid((100, 100))
+    graph = frozenset(graph_grid((100, 100)))
     set(generate_backtracking_maze(graph, (0, 0)))
-
-
-def test_wilson_large():
-    """Larger test to help profiling."""
-    graph = graph_grid((100, 100))
     set(generate_wilson_maze(graph))

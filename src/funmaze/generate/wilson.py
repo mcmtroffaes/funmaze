@@ -44,14 +44,15 @@ def generate_wilson_forest(graph: IGraph[Node]) -> IGraph[Node]:
     """
     nodes, neighbours = graph_nodes_neighbours(graph)
     unvisited = set(nodes)
-    visited: set[Node] = {unvisited.pop()}
-    while unvisited:
-        node = unvisited.pop()
-        path = loop_erased_random_walk(neighbours, node, visited)
-        path_set = set(path)
-        visited |= path_set
-        unvisited -= path_set
-        yield from graph_from_path(path)
+    if unvisited:
+        visited: set[Node] = {unvisited.pop()}
+        while unvisited:
+            node = unvisited.pop()
+            path = loop_erased_random_walk(neighbours, node, visited)
+            path_set = set(path)
+            visited |= path_set
+            unvisited -= path_set
+            yield from graph_from_path(path)
 
 
 def generate_wilson_maze(graph: IGraph[Node]) -> IGraph[Node]:
