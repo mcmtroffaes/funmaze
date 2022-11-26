@@ -5,7 +5,7 @@ from funmaze.graph import IGraph, Node, graph_neighbours
 
 
 def solve_dfs_one(graph: IGraph[Node], start: Node, end: Node
-                  ) -> Iterable[Sequence[Node]]:
+                  ) -> Sequence[Node] | None:
     """Use the backtracking algorithm for generating trees to find a solution
     to the maze. We do this by returning the stack as soon as the generator
     reaches the end state. This routine will return at most one solution.
@@ -22,4 +22,4 @@ def solve_dfs_one(graph: IGraph[Node], start: Node, end: Node
             node2 = random.choice(good_neighbours)
             visited.add(node2)
             stack.append(node2)
-    return [stack] if stack else []
+    return stack if stack else None

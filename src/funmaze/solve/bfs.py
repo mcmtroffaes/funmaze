@@ -9,6 +9,8 @@ def solve_bfs_all(graph: IGraph[Node], start: Node, end: Node
                   ) -> Iterable[Sequence[Node]]:
     """Use a breadth-first-search on the graph to find all paths
     between two nodes.
+
+    .. warning:: This routine consumes a lot of memory.
     """
     neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
     queue: SimpleQueue[list[Node]] = SimpleQueue()
@@ -26,19 +28,21 @@ def solve_bfs_all(graph: IGraph[Node], start: Node, end: Node
 
 # https://en.wikipedia.org/wiki/Breadth-first_search#Pseudocode
 def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
-                           ) -> Iterable[Sequence[Node]]:
+                           ) -> Sequence[Node] | None:
     """Use a breadth-first-search on the graph to find one shortest path
     between two nodes.
     """
     # bfs returns shortest solutions first
-    solution = next(iter(solve_bfs_all(graph, start, end)), None)
-    return [solution] if solution is not None else []
+    # TODO make a more memory efficient implementation
+    return next(iter(solve_bfs_all(graph, start, end)), None)
 
 
 def solve_bfs_all_shortest(graph: IGraph[Node], start: Node, end: Node
                            ) -> Iterable[Sequence[Node]]:
     """Use a breadth-first-search on the graph to find all shortest paths
     between two nodes.
+
+    .. warning:: This routine consumes a lot of memory.
     """
     # bfs returns shortest solutions first
     solution_iter = iter(solve_bfs_all(graph, start, end))
