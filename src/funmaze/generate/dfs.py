@@ -1,4 +1,4 @@
-"""Standard depth-first-search "backtracking" algorithms."""
+"""Standard depth-first-search algorithms."""
 
 import random
 from collections.abc import Mapping, Set
@@ -34,7 +34,7 @@ def generate_dfs_tree(graph: IGraph[Node], start: Node
 def generate_dfs_maze(
         graph: IGraph[Node], start: Node) -> IGraph[Node]:
     """Return a perfect maze on the graph.
-    First, we generate a tree through the recursive backtracker algorithm.
+    First, we generate a tree through depth-first-search.
     Then, we complete the maze by adding all reverse edges.
     """
     return graph_undirected(generate_dfs_tree(graph, start))
