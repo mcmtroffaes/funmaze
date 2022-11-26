@@ -5,8 +5,8 @@ import itertools
 import random
 from collections.abc import Iterable, Set, Mapping, Sequence
 
-from funmaze.graph import IGraph, Node, Edge, graph_neighbours, \
-    graph_from_path, graph_undirected
+from funmaze.graph import IGraph, Node, \
+    graph_from_path, graph_undirected, graph_nodes_neighbours
 
 
 def simple_random_walk(
@@ -23,36 +23,40 @@ def loop_erased_random_walk(
     neighbours: Mapping[Node, Set[Node]], start: Node, end: Set[Node]
 ) -> Sequence[Node]:
     """Loop erased random walk from *start* to *end*."""
-    path = itertools.takewhile(
-        lambda node_: node_ not in end,
-        simple_random_walk(neighbours, start))
-    erased_path: list[Node] = []
-    erased_visited: set[Node] = set()
-    for node in path:
-        while node in erased_visited:
-            erased_visited.remove(erased_path.pop())
-        erased_visited.add(node)
-        erased_path.append(node)
-    return erased_path
+    path: list[Node] = []
+    path_set: set[Node] = set()
+    for node in simple_random_walk(neighbours, start):
+        while node in path_set:
+            path_set.remove(path.pop())
+        path.append(node)
+        path_set.add(node)
+        if node in end:
+            return path
 
 
-def generate_wilson_tree(graph: IGraph[Node]) -> IGraph[Node]:
-    neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
-    unvisited_set: set[Node] = set(neighbours)
-    node = unvisited_set.pop()
-    visited_set: set[Node] = {node}
-    while unvisited_set:
-        node = unvisited_set.pop()
-        path = loop_erased_random_walk(neighbours, node, visited_set)
-        for node2 in path:
-            visited_set.add(node2)
-            unvisited_set.remove(node2)
+def generate_wilson_forest(graph: IGraph[Node]) -> IGraph[Node]:
+    """Generate a spanning forest subgraph of *graph*, through Wilson's
+    algorithm.
+
+    If the graph is connected, this will be a single spanning tree.
+    Otherwise, it will be a spanning forest with one spanning tree in each
+    connected component of the graph.
+    """
+    nodes, neighbours = graph_nodes_neighbours(graph)
+    unvisited = set(nodes)
+    visited: set[Node] = {unvisited.pop()}
+    while unvisited:
+        node = unvisited.pop()
+        path = loop_erased_random_walk(neighbours, node, visited)
+        path_set = set(path)
+        visited |= path_set
+        unvisited -= path_set
         yield from graph_from_path(path)
 
 
 def generate_wilson_maze(graph: IGraph[Node]) -> IGraph[Node]:
     """Return a perfect maze on the graph.
-    First, we generate a tree through the recursive backtracker algorithm.
+    First, we generate a spanning forest through the Wilson algorithm.
     Then, we complete the maze by adding all reverse edges.
     """
-    return graph_undirected(generate_wilson_tree(graph))
+    return graph_undirected(generate_wilson_forest(graph))
