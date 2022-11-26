@@ -1,9 +1,9 @@
 """Standard depth-first-search "backtracking" algorithms."""
 
 import random
-from collections.abc import Mapping, Set, Iterable
+from collections.abc import Mapping, Set
 
-from funmaze.graph import IGraph, Node, Edge, graph_neighbours, \
+from funmaze.graph import IGraph, Node, graph_neighbours, \
     graph_undirected
 
 

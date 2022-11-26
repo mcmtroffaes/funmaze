@@ -1,5 +1,4 @@
 """Wilson's algorithm for generating uniform spanning trees."""
-import itertools
 # see https://www.kurims.kyoto-u.ac.jp/~kumagai/LN-barlow1.pdf for some notes
 
 import random
