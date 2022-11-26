@@ -3,7 +3,7 @@ name = "funmaze"
 version = "0.0.1"
 description = "A functional programming interface for generating and solving mazes."
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { file = "LICENSE.rst" }
 keywords = ["maze", "labyrinth", "puzzle", "functional"]
 authors = [
@@ -19,7 +19,6 @@ classifiers = [
     'Operating System :: OS Independent',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
     'Topic :: Scientific/Engineering :: Mathematics',

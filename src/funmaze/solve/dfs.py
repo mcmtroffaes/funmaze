@@ -1,5 +1,5 @@
 import random
-from collections.abc import Mapping, Set, Iterable, Sequence
+from collections.abc import Mapping, Set, Sequence
 
 from funmaze.graph import IGraph, Node, graph_neighbours
 

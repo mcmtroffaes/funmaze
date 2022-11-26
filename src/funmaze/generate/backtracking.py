@@ -1,3 +1,5 @@
+"""Standard depth-first-search "backtracking" algorithms."""
+
 import random
 from collections.abc import Mapping, Set, Iterable
 
@@ -6,7 +8,7 @@ from funmaze.graph import IGraph, Node, Edge, graph_neighbours, \
 
 
 def generate_backtracking_tree(graph: IGraph[Node], start: Node
-                               ) -> Iterable[Edge[Node]]:
+                               ) -> IGraph[Node]:
     """Return a random subgraph of *graph* representing a tree on the graph,
     rooted at *root*, through the recursive backtracker algorithm.
     The tree will be a spanning tree of the connected component of the graph

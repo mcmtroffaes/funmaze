@@ -3,7 +3,7 @@ import itertools
 import numpy as np
 import pytest
 
-from funmaze.graph import graph_remove_nodes, graph_nodes
+from funmaze.graph import graph_nodes
 from funmaze.graph.grid import grid_replace_nodes, grid_squares, \
     neighbourhood_graph
 from funmaze.render.graphviz import render_graphviz

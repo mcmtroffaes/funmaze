@@ -1,5 +1,5 @@
 import itertools
-from collections.abc import Set, Mapping, Iterable
+from collections.abc import Set, Mapping, Iterable, Sequence
 from typing import TypeVar
 
 Node = TypeVar("Node")
@@ -21,6 +21,10 @@ def graph_nodes(graph: IGraph[Node]) -> Iterable[Node]:
     Wrap the result into a set to get rid of those.
     """
     return itertools.chain.from_iterable(graph)
+
+
+def graph_from_path(path: Sequence[Node]) -> IGraph[Node]:
+    return zip(path[:-1], path[1:])
 
 
 def graph_neighbours(graph: IGraph[Node]) -> Mapping[Node, Set[Node]]:
