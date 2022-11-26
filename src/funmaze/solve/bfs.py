@@ -33,9 +33,29 @@ def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
     """Use a breadth-first-search on the graph to find one shortest path
     between two nodes.
     """
-    # bfs returns shortest solutions first
-    # TODO make a more memory efficient implementation
-    return next(iter(solve_bfs_all(graph, start, end)), None)
+    neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
+    parent: dict[Node, Node] = {}
+
+    def _backtrack(node3) -> Iterable[Node]:
+        yield node3
+        while (parent_node := parent.get(node3)) is not None:
+            node3 = parent_node
+            yield node3
+
+    visited: set[Node] = {start}
+    queue: SimpleQueue[Node] = SimpleQueue()
+    queue.put(start)
+    while not queue.empty():
+        node = queue.get()
+        if node == end:
+            return list(reversed(list(_backtrack(node))))
+        else:
+            for node2 in neighbours.get(node, set()):
+                if node2 not in visited:
+                    visited.add(node2)
+                    parent[node2] = node
+                    queue.put(node2)
+    return None
 
 
 def solve_bfs_all_shortest(graph: IGraph[Node], start: Node, end: Node
