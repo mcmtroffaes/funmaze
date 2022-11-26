@@ -29,9 +29,8 @@ def loop_erased_random_walk(
     erased_path: list[Node] = []
     erased_visited: set[Node] = set()
     for node in path:
-        if node in erased_visited:
-            while node in erased_visited:
-                erased_visited.remove(erased_path.pop())
+        while node in erased_visited:
+            erased_visited.remove(erased_path.pop())
         erased_visited.add(node)
         erased_path.append(node)
     return erased_path
