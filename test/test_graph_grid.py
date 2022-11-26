@@ -60,5 +60,4 @@ def test_grid_triangles(
 def test_grid_hexagons(
         ver: int, hor: int, graph: Set[tuple[int, int]]) -> None:
     grid, mask = grid_hexagons(ver, hor)
-    print(grid)
     assert frozenset(neighbourhood_graph(grid, mask=mask, steps=(1,))) == graph

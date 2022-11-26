@@ -1,30 +1,32 @@
 from collections.abc import Iterable, Mapping, Set, Sequence
+from queue import SimpleQueue
 
 from funmaze.graph import IGraph, Node, graph_neighbours
 
 
+# https://www.geeksforgeeks.org/print-paths-given-source-destination-using-bfs/
 def solve_bfs_all(graph: IGraph[Node], start: Node, end: Node
                   ) -> Iterable[Sequence[Node]]:
     """Use a breadth-first-search on the graph to find all paths
     between two nodes.
     """
     neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
-    solutions: list[list[Node]] = [[start]]
-    while solutions:
-        solutions2: list[list[Node]] = []
-        for solution in solutions:
-            node = solution[-1]
-            if node == end:
-                yield solution
-            else:
-                for node2 in neighbours.get(node, set()):
-                    if node2 not in solution:
-                        solutions2.append(solution + [node2])
-        solutions = solutions2
+    queue: SimpleQueue[list[Node]] = SimpleQueue()
+    queue.put([start])
+    while not queue.empty():
+        path = queue.get()
+        node = path[-1]
+        if node == end:
+            yield path
+        else:
+            for node2 in neighbours.get(node, set()):
+                if node2 not in path:
+                    queue.put(path + [node2])
 
 
-def solve_bfs_shortest(graph: IGraph[Node], start: Node, end: Node
-                       ) -> Iterable[Sequence[Node]]:
+# https://en.wikipedia.org/wiki/Breadth-first_search#Pseudocode
+def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
+                           ) -> Iterable[Sequence[Node]]:
     """Use a breadth-first-search on the graph to find one shortest path
     between two nodes.
     """
