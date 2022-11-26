@@ -7,10 +7,10 @@ from funmaze.graph import IGraph, Node, graph_neighbours
 # https://www.geeksforgeeks.org/print-paths-given-source-destination-using-bfs/
 def solve_bfs_all(graph: IGraph[Node], start: Node, end: Node
                   ) -> Iterable[Sequence[Node]]:
-    """Use a breadth-first-search on the graph to find all paths
-    between two nodes.
+    """Find all paths on the *graph* from *start* to *end*
+    by breadth-first-search.
 
-    .. warning:: This routine consumes a lot of memory.
+    .. warning:: Implementation consumes a lot of memory.
     """
     neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
     queue: SimpleQueue[list[Node]] = SimpleQueue()
@@ -42,7 +42,7 @@ def solve_bfs_all_shortest(graph: IGraph[Node], start: Node, end: Node
     """Use a breadth-first-search on the graph to find all shortest paths
     between two nodes.
 
-    .. warning:: This routine consumes a lot of memory.
+    .. warning:: Implementation consumes a lot of memory.
     """
     # bfs returns shortest solutions first
     solution_iter = iter(solve_bfs_all(graph, start, end))
