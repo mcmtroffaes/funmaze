@@ -31,6 +31,7 @@ def loop_erased_random_walk(
         path_set.add(node)
         if node in end:
             return path
+    raise ValueError(f"unable to go from {start} to {end}")
 
 
 def generate_wilson_forest(graph: IGraph[Node]) -> IGraph[Node]:
