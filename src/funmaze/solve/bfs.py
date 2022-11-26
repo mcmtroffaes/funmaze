@@ -5,6 +5,7 @@ from funmaze.graph import IGraph, Node, graph_neighbours
 
 
 # https://www.geeksforgeeks.org/print-paths-given-source-destination-using-bfs/
+# https://stackoverflow.com/a/64667117/2863746
 def solve_bfs_all(graph: IGraph[Node], start: Node, end: Node
                   ) -> Iterable[Sequence[Node]]:
     """Find all paths on the *graph* from *start* to *end*
