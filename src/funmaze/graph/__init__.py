@@ -32,19 +32,8 @@ def graph_neighbours(graph: IGraph[Node]) -> Mapping[Node, Set[Node]]:
     neighbours: dict[Node, set[Node]] = {}
     for node1, node2 in graph:
         neighbours.setdefault(node1, set()).add(node2)
+        neighbours.setdefault(node2, set())
     return neighbours
-
-
-def graph_nodes_neighbours(
-        graph: IGraph[Node]) -> tuple[Set[Node], Mapping[Node, Set[Node]]]:
-    """Find nodes and neighbours ("forward star")."""
-    nodes: set[Node] = set()
-    neighbours: dict[Node, set[Node]] = {}
-    for node1, node2 in graph:
-        neighbours.setdefault(node1, set()).add(node2)
-        nodes.add(node1)
-        nodes.add(node2)
-    return nodes, neighbours
 
 
 def graph_remove_nodes(graph: IGraph, nodes: Set[Node]) -> IGraph[Node]:
