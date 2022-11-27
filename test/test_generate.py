@@ -62,7 +62,8 @@ def test_wilson_bad_1() -> None:
 
 
 def test_wilson_bad_2() -> None:
-    assert not set(generate_wilson_maze([(0, 1)], 0))
+    with pytest.raises(ValueError):
+        set(generate_wilson_maze([(0, 1)], 0))
 
 
 def test_generate_3d() -> None:
