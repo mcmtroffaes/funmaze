@@ -44,9 +44,8 @@ def generate_wilson_tree(graph: IGraph[Node], start: Node) -> IGraph[Node]:
 
     Important: for every node in *graph*, there must be at least one path
     to *start*, otherwise the algorithm will throw a :exc:`ValueError`
-    (if it finds a path that terminates before reaching the root),
-    or will not terminate (if it gets stuck in an absorbing class),
-    or will not be a valid spanning tree (if some nodes have no neighbours).
+    (if it finds a path that terminates before reaching *start*),
+    or will not terminate (if it gets stuck in an absorbing class).
     """
     neighbours = graph_neighbours(graph)
     unvisited = set(neighbours)
