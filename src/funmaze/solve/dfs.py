@@ -14,13 +14,13 @@ def solve_dfs_one(graph: IGraph[Node], start: Node, end: Node
     as it reaches the end state rather than waiting until it becomes
     empty again.
     """
-    neighbours: Mapping[Node, Set[Node]] = graph_neighbours(graph)
+    neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
     stack: list[Node] = [start]
     visited: set[Node] = {start}
     while stack and stack[-1] != end:
         node = stack.pop()
         if good_neighbours := [
-                node2 for node2 in neighbours.get(node, set())
+                node2 for node2 in neighbours[node]
                 if node2 not in visited]:
             stack.append(node)
             node2 = random.choice(good_neighbours)

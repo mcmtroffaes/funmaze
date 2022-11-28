@@ -10,20 +10,19 @@ from funmaze.graph import IGraph, Node, \
 
 
 def simple_random_walk(
-        neighbours: Mapping[Node, Set[Node]], start: Node) -> Iterable[Node]:
+        neighbours: Mapping[Node, Sequence[Node]], start: Node) -> Iterable[Node]:
     """Simple uniform random walk from *start*.
     Raises KeyError if a node is not present in *neighbours*.
     Raises IndexError if a node has no neighbours (i.e. returns empty set).
     """
     node = start
-    yield node
     while True:
-        node = random.choice(list(neighbours[node]))
         yield node
+        node = random.choice(neighbours[node])
 
 
 def loop_erased_random_walk(
-    neighbours: Mapping[Node, Set[Node]], start: Node, end: Set[Node]
+    neighbours: Mapping[Node, Sequence[Node]], start: Node, end: Set[Node]
 ) -> Sequence[Node]:
     """Loop erased random walk from *start* to *end*."""
     path: list[Node] = []
@@ -52,7 +51,7 @@ def generate_wilson_tree(graph: IGraph[Node], start: Node) -> IGraph[Node]:
     """
     neighbours = graph_neighbours(graph)
     unvisited = set(neighbours)
-    unvisited.discard(start)
+    unvisited.remove(start)
     visited: set[Node] = {start}
     while unvisited:
         node = unvisited.pop()

@@ -52,8 +52,10 @@ def test_generate_grid_with_room() -> None:
 
 
 def test_generate_empty() -> None:
-    assert set(generate_dfs_maze(set(), 0)) == set()
-    assert set(generate_wilson_maze(set(), 0)) == set()
+    with pytest.raises(KeyError):
+        assert set(generate_dfs_maze(set(), 0))
+    with pytest.raises(KeyError):
+        assert set(generate_wilson_maze(set(), 0))
 
 
 def test_wilson_bad_1() -> None:
