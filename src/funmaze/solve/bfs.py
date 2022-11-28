@@ -1,4 +1,4 @@
-from collections.abc import Iterable, Mapping, Set, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from queue import SimpleQueue
 
 from funmaze.graph import IGraph, Node, graph_neighbours
