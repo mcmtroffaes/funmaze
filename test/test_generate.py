@@ -5,8 +5,7 @@ import pytest
 
 from funmaze.generate.dfs import generate_dfs_maze
 from funmaze.generate.wilson import generate_wilson_maze
-from funmaze.graph.grid import grid_squares, neighbourhood_graph, \
-    grid_replace_nodes, graph_grid
+from funmaze.graph.grid import grid_squares, neighbourhood_graph, graph_grid
 from funmaze.render.bitmap import render_bitmap
 
 
@@ -29,10 +28,8 @@ def test_generate_simple() -> None:
 
 
 def test_generate_grid_with_room() -> None:
-    grid = grid_replace_nodes(
-        itertools.product(range(3, 6), range(3, 6)),
-        np.uint(99),
-        grid_squares((9, 9)))
+    grid = grid_squares((9, 9))
+    grid[slice(3, 6), slice(3, 6)] = np.uint(99)
     graph = frozenset(neighbourhood_graph(grid))
     maze1 = frozenset(generate_dfs_maze(graph, grid[0, 0]))
     maze2 = frozenset(generate_wilson_maze(graph, grid[0, 0]))

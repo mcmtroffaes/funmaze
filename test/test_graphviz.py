@@ -4,20 +4,16 @@ import numpy as np
 import pytest
 
 from funmaze.graph import graph_nodes
-from funmaze.graph.grid import grid_replace_nodes, grid_squares, \
-    neighbourhood_graph
+from funmaze.graph.grid import grid_squares, neighbourhood_graph
 from funmaze.render.graphviz import render_graphviz
 
 
 def test_graphviz() -> None:
-    base_grid = grid_squares((7, 7))
-    room = base_grid[2, 2]
-    mask = base_grid[4, 4]
-    grid = grid_replace_nodes(
-        itertools.product(range(3, 5), range(3, 5)), mask,
-        grid_replace_nodes(
-            itertools.product(range(1, 4), range(1, 4)), room,
-            base_grid))
+    grid = grid_squares((7, 7))
+    room = grid[2, 2]
+    mask = grid[4, 4]
+    grid[slice(1, 4), slice(1, 4)] = room
+    grid[slice(3, 5), slice(3, 5)] = mask
     graph = frozenset(neighbourhood_graph(grid, mask=mask))
     nodes = frozenset(graph_nodes(graph))
     names = {node: str(node) for node in nodes}

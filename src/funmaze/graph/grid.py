@@ -69,17 +69,6 @@ def grid_hexagons(num_ver: int, num_hor: int
     return grid, np.int_(0)
 
 
-def grid_replace_nodes(
-        positions: Iterable[tuple[int, ...]],
-        node: GridNode,
-        grid: npt.NDArray[GridNode],
-) -> npt.NDArray[GridNode]:
-    grid2 = grid.copy()
-    for pos in positions:
-        grid2[pos] = node
-    return grid2
-
-
 def neighbourhood_positions(
         shape: tuple[int, ...], pos: tuple[int, ...],
         steps: Collection[int] = (-1, 1),
