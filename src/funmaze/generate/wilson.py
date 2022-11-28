@@ -11,7 +11,7 @@ from funmaze.graph import IGraph, Node, \
 
 def simple_random_walk(
         neighbours: Mapping[Node, Sequence[Node]], start: Node) -> Iterable[Node]:
-    """Simple uniform random walk from *start*.
+    """Infinite simple uniform random walk from *start*.
     Raises KeyError if a node is not present in *neighbours*.
     Raises IndexError if a node has no neighbours (i.e. returns empty set).
     """
@@ -34,7 +34,7 @@ def loop_erased_random_walk(
         path_set.add(node)
         if node in end:
             return path
-    raise ValueError(f"no path from {start} to {end}")
+    # pragma: no cover
 
 
 def generate_wilson_tree(graph: IGraph[Node], start: Node) -> IGraph[Node]:
@@ -45,8 +45,8 @@ def generate_wilson_tree(graph: IGraph[Node], start: Node) -> IGraph[Node]:
     the set of all spanning in-trees rooted at *start*.
 
     Important: for every node in *graph*, there must be at least one path
-    to *start*, otherwise the algorithm will throw a :exc:`ValueError`
-    (if it finds a path that terminates before reaching *start*),
+    to *start*, otherwise the algorithm will throw an :exc:`IndexError`
+    (if it finds a terminal node before reaching *start*),
     or will not terminate (if it gets stuck in an absorbing class).
     """
     neighbours = graph_neighbours(graph)
