@@ -36,10 +36,6 @@ def test_graph_merge_nodes() -> None:
         (10, 10),
     }
     graph3 = set(graph_merge_nodes(graph, rec, np.uint(10), self_loops=False))
-    # 0  1  2  3
-    # 4  ** ** **
-    # 8  ** 10 **
-    # 12 ** ** **
     assert graph3 == {
         (0, 1), (1, 2), (2, 3),
         (0, 4), (4, 8), (8, 12),
