@@ -44,8 +44,8 @@ def grid_triangles(num_ver: int, num_hor: int
     return grid, np.int_(0)
 
 
-def grid_hexagons(num_ver: int, num_hor: int
-                  ) -> tuple[npt.NDArray[np.int_], np.int_]:
+def grid_hexagons(num_ver: int, num_hor: int, mask: bool = True,
+                  ) -> tuple[npt.NDArray[np.int_], np.int_ | None]:
     """Return a two-dimensional grid matching a hexagonal topology.
     The node for the mask (which must be ignored when building the
     neighbourhood graph) is returned as well.
@@ -65,8 +65,13 @@ def grid_hexagons(num_ver: int, num_hor: int
         for j in range(num_hor):
             k = 2 * j + i % 2
             grid[i, slice(k, k + 2)] = value
+            if not mask:
+                if i % 2 == 0 and j == num_hor - 1:
+                    grid[i, 2 * num_hor] = value
+                elif j == 0:
+                    grid[i, 0] = value
             value += 1
-    return grid, np.int_(0)
+    return grid, np.int_(0) if mask else None
 
 
 def neighbourhood_positions(

@@ -61,3 +61,13 @@ def test_grid_hexagons(
         ver: int, hor: int, graph: Set[tuple[int, int]]) -> None:
     grid, mask = grid_hexagons(ver, hor)
     assert frozenset(neighbourhood_graph(grid, mask=mask, steps=(1,))) == graph
+
+
+def test_grid_hexagons_2() -> None:
+    grid, mask = grid_hexagons(3, 3, mask=False)
+    assert mask is None
+    np.testing.assert_array_equal(grid, [
+        [1, 1, 2, 2, 3, 3, 3],
+        [4, 4, 4, 5, 5, 6, 6],
+        [7, 7, 8, 8, 9, 9, 9],
+    ])
