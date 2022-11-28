@@ -27,16 +27,20 @@ def graph_from_path(path: Sequence[Node]) -> IGraph[Node]:
     return zip(path[:-1], path[1:])
 
 
-def graph_neighbours(graph: IGraph[Node], self_loops=False
-                     ) -> Mapping[Node, Sequence[Node]]:
+def graph_remove_self_loops(graph: IGraph[Node]) -> IGraph[Node]:
+    for node1, node2 in graph:
+        if node1 != node2:
+            yield node1, node2
+
+
+def graph_neighbours(graph: IGraph[Node]) -> Mapping[Node, Sequence[Node]]:
     """Find neighbours ("forward star") of every node."""
     # we return a Sequence rather than a Set to support random sampling
     # from the neighbours
     neighbours: dict[Node, set[Node]] = {}
     for node1, node2 in graph:
-        if self_loops or node1 != node2:
-            neighbours.setdefault(node1, set()).add(node2)
-            neighbours.setdefault(node2, set())
+        neighbours.setdefault(node1, set()).add(node2)
+        neighbours.setdefault(node2, set())
     return dict((key, list(value)) for key, value in neighbours.items())
 
 
@@ -47,10 +51,8 @@ def graph_remove_nodes(graph: IGraph, nodes: Set[Node]) -> IGraph[Node]:
 
 
 def graph_merge_nodes(
-        graph: IGraph, nodes: Set[Node], target: Node, self_loops=False
-) -> IGraph[Node]:
+        graph: IGraph, nodes: Set[Node], target: Node) -> IGraph[Node]:
     """Remove and merge *nodes* from *graph* into a *target* node.
-    Loops from target to target are retained if *self_loops* is ``True``.
     """
     def _update(edge: Edge[Node]) -> Edge[Node] | None:
         node1, node2 = edge
@@ -62,10 +64,8 @@ def graph_merge_nodes(
         else:
             if node2 not in nodes:
                 return target, node2
-            elif self_loops:
-                return target, target
             else:
-                return None
+                return target, target
     return (
         edge2 for edge in graph if (edge2 := _update(edge)) is not None)
 
