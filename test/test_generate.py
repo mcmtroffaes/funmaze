@@ -57,12 +57,12 @@ def test_generate_empty() -> None:
 
 
 def test_wilson_bad_1() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(IndexError):
         set(generate_wilson_maze([(1, 0), (2, 3)], 0))
 
 
 def test_wilson_bad_2() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(IndexError):
         set(generate_wilson_maze([(0, 1)], 0))
 
 

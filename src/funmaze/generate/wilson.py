@@ -11,11 +11,14 @@ from funmaze.graph import IGraph, Node, \
 
 def simple_random_walk(
         neighbours: Mapping[Node, Set[Node]], start: Node) -> Iterable[Node]:
-    """Simple uniform random walk from *start*."""
+    """Simple uniform random walk from *start*.
+    Raises KeyError if a node is not present in *neighbours*.
+    Raises IndexError if a node has no neighbours (i.e. returns empty set).
+    """
     node = start
     yield node
-    while good_neighbours := list(neighbours.get(node, set())):
-        node = random.choice(good_neighbours)
+    while True:
+        node = random.choice(list(neighbours[node]))
         yield node
 
 
