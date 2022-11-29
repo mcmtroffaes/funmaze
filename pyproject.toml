@@ -1,6 +1,6 @@
 [project]
 name = "funmaze"
-version = "0.0.1"
+version = "0.0.2"
 description = "A functional programming interface for generating and solving mazes."
 readme = "README.rst"
 requires-python = ">=3.10"
