@@ -24,7 +24,17 @@ def graph_nodes(graph: IGraph[Node]) -> Iterable[Node]:
 
 
 def graph_from_path(path: Sequence[Node]) -> IGraph[Node]:
-    return zip(path[:-1], path[1:])
+    # this is zip(path[:-1], path[1:])
+    # but some Sequence types (such as deque) do not support slice notation
+    # and this implementation avoids copying the path
+    path_iter = iter(path)
+    try:
+        node1: Node = next(path_iter)
+    except StopIteration:
+        return
+    for node2 in path_iter:
+        yield node1, node2
+        node1 = node2
 
 
 def graph_remove_self_loops(graph: IGraph[Node]) -> IGraph[Node]:

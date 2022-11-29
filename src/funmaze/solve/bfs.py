@@ -45,12 +45,13 @@ def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
     neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
     parent: dict[Node, Node] = {}
 
-    def _backtrack(node3) -> Iterable[Node]:
-        yield node3
+    def _backtrack(node3) -> Sequence[Node]:
+        path: deque[Node] = deque([node3])
         while (parent_node := parent[node3]) != start:
             node3 = parent_node
-            yield node3
-        yield start
+            path.appendleft(node3)
+        path.appendleft(start)
+        return path
 
     visited: set[Node] = {start}
     queue: deque[Node] = deque()
@@ -58,7 +59,7 @@ def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
     while queue:
         node = queue.popleft()
         if node == end:
-            return list(reversed(list(_backtrack(node))))
+            return _backtrack(node)
         else:
             for node2 in neighbours[node]:
                 if node2 not in visited:
