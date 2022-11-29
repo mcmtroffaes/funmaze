@@ -1,4 +1,5 @@
 import random
+from collections import deque
 from collections.abc import Mapping, Sequence
 
 from funmaze.graph import IGraph, Node, graph_neighbours
@@ -15,7 +16,7 @@ def solve_dfs_one(graph: IGraph[Node], start: Node, end: Node
     empty again.
     """
     neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
-    stack: list[Node] = [start]
+    stack: deque[Node] = deque([start])
     visited: set[Node] = {start}
     while stack and stack[-1] != end:
         node = stack.pop()

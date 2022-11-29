@@ -3,6 +3,7 @@
 # see https://www.kurims.kyoto-u.ac.jp/~kumagai/LN-barlow1.pdf for some notes
 
 import random
+from collections import deque
 from collections.abc import Iterable, Set, Mapping, Sequence
 
 from funmaze.graph import IGraph, Node, \
@@ -26,7 +27,7 @@ def loop_erased_random_walk(
     neighbours: Mapping[Node, Sequence[Node]], start: Node, end: Set[Node]
 ) -> Sequence[Node]:
     """Loop erased random walk from *start* to *end*."""
-    path: list[Node] = []
+    path: deque[Node] = deque()
     path_set: set[Node] = set()
     for node in simple_random_walk(neighbours, start):
         while node in path_set:

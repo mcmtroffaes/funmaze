@@ -1,6 +1,7 @@
 """Standard depth-first-search algorithms."""
 
 import random
+from collections import deque
 from collections.abc import Mapping, Sequence
 
 from funmaze.graph import IGraph, Node, graph_neighbours, graph_undirected
@@ -17,7 +18,7 @@ def generate_dfs_tree(graph: IGraph[Node], start: Node
     This algorithm is also known as the recursive backtracker.
     """
     neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
-    stack: list[Node] = [start]
+    stack: deque[Node] = deque([start])
     visited: set[Node] = {start}
     while stack:
         node = stack.pop()

@@ -1,5 +1,5 @@
+from collections import deque
 from collections.abc import Iterable, Mapping, Sequence
-from queue import SimpleQueue
 
 from funmaze.graph import IGraph, Node, graph_neighbours
 
@@ -14,24 +14,33 @@ def solve_bfs_all(graph: IGraph[Node], start: Node, end: Node
     .. warning:: Implementation consumes a lot of memory.
     """
     neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
-    queue: SimpleQueue[list[Node]] = SimpleQueue()
-    queue.put([start])
-    while not queue.empty():
-        path = queue.get()
+    queue: deque[list[Node]] = deque()
+    queue.append([start])
+    while queue:
+        path = queue.popleft()
         node = path[-1]
         if node == end:
             yield path
         else:
             for node2 in neighbours[node]:
                 if node2 not in path:
-                    queue.put(path + [node2])
+                    queue.append(path + [node2])
 
 
 # https://en.wikipedia.org/wiki/Breadth-first_search#Pseudocode
+# https://www.baeldung.com/cs/graph-algorithms-bfs-dijkstra
 def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
                            ) -> Sequence[Node] | None:
     """Use a breadth-first-search on the graph to find one shortest path
     between two nodes.
+
+    This implementation is almost identical to Dijkstra's algorithm
+    where we exploit that the distance along every edge is equal to one
+    to make for a slightly faster algorithm.
+    The difference is that, unlike Dijkstra, we do not need to use a priority
+    queue ordered by distance, and instead can use a simple FIFO queue,
+    since this will be ordered by distance automatically (as edges have the
+    same distance).
     """
     neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
     parent: dict[Node, Node] = {}
@@ -44,10 +53,10 @@ def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
         yield start
 
     visited: set[Node] = {start}
-    queue: SimpleQueue[Node] = SimpleQueue()
-    queue.put(start)
-    while not queue.empty():
-        node = queue.get()
+    queue: deque[Node] = deque()
+    queue.append(start)
+    while queue:
+        node = queue.popleft()
         if node == end:
             return list(reversed(list(_backtrack(node))))
         else:
@@ -55,7 +64,7 @@ def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
                 if node2 not in visited:
                     visited.add(node2)
                     parent[node2] = node
-                    queue.put(node2)
+                    queue.append(node2)
     return None
 
 
