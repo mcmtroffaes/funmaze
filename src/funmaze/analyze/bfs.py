@@ -10,7 +10,7 @@ def analyze_bfs_branches(graph: IGraph[Node], start: Node,
     by breadth-first-search.
 
     A branch is defined as a non-looping section of the graph with no forks.
-    The implementation is meant for perfect graphs which have no cycles.
+    The implementation is meant for trees (i.e. perfect mazes).
     If there are cycles, they will be counted as two branches.
     """
     neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
