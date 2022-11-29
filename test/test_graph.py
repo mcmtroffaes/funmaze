@@ -1,7 +1,9 @@
+from collections import deque
+
 import numpy as np
 
 from funmaze.graph import Graph, graph_merge_nodes, graph_remove_nodes, \
-    graph_remove_self_loops
+    graph_remove_self_loops, graph_from_path
 from funmaze.graph.grid import grid_squares, neighbourhood_graph
 
 
@@ -57,3 +59,9 @@ def test_graph_merge_nodes_2() -> None:
     assert set(graph_merge_nodes(graph, {1, 2}, 2)) == {(0, 2), (2, 2)}
     assert set(graph_merge_nodes(graph, {0, 2}, 0)) == {(0, 1), (1, 0), (0, 0)}
     assert set(graph_merge_nodes(graph, {0, 2}, 2)) == {(1, 2), (2, 1), (2, 2)}
+
+
+def test_graph_from_path() -> None:
+    assert frozenset(graph_from_path(deque([1, 2, 3]))) == {(1, 2), (2, 3)}
+    assert frozenset(graph_from_path(deque([1]))) == frozenset()
+    assert frozenset(graph_from_path(deque())) == frozenset()
