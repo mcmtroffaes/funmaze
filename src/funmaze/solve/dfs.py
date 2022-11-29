@@ -8,7 +8,7 @@ from funmaze.graph import IGraph, Node, graph_neighbours
 def solve_dfs_one(graph: IGraph[Node], start: Node, end: Node
                   ) -> Sequence[Node] | None:
     """Find one path on the *graph* from *start* to *end*
-    by depth-first-search.
+    by depth-first-search, visiting neighbours in random order.
 
     This is the same as using the backtracking algorithm for generating trees
     to find a solution to the maze, but returning the stack as soon
