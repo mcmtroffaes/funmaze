@@ -13,6 +13,10 @@ def solve_bfs_all(graph: IGraph[Node], start: Node, end: Node
 
     .. warning:: Implementation consumes a lot of memory.
     """
+    # TODO return the graph instead of all paths, this will be much faster
+    #      (smaller queue) and consume a lot less memory (no need to store
+    #      full paths); can then write another function that iterates over all
+    #      paths in a graph from a given node
     neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
     queue: deque[list[Node]] = deque()
     queue.append([start])
@@ -76,6 +80,7 @@ def solve_bfs_all_shortest(graph: IGraph[Node], start: Node, end: Node
 
     .. warning:: Implementation consumes a lot of memory.
     """
+    # TODO return graph instead of set of paths (see TODO in solve_bfs_all)
     # bfs returns shortest solutions first
     solution_iter = iter(solve_bfs_all(graph, start, end))
     solution1 = next(solution_iter, None)
