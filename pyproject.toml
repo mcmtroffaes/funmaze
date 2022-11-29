@@ -46,3 +46,6 @@ funmaze = "funmaze:__main__"
 [project.entry-points."funmaze.solve"]
 [project.entry-points."funmaze.transform"]
 [project.entry-points."funmaze.visualize"]
+
+[tool.setuptools.package-data]
+funmaze = ["py.typed"]
