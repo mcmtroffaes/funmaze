@@ -3,7 +3,7 @@ import itertools
 import pytest
 
 from funmaze.generate.dfs import generate_dfs_maze
-from funmaze.graph import Graph, Node
+from funmaze.graph import Graph, Node, graph_undirected
 from funmaze.graph.grid import grid_squares, neighbourhood_graph
 from funmaze.solve.bfs import solve_bfs_all, solve_bfs_one_shortest, \
     solve_bfs_all_shortest
@@ -55,7 +55,7 @@ def test_bfs_3() -> None:
 @pytest.mark.parametrize("shape", [
     (2, 2), (5, 5), (2, 5), (5, 2), (10, 10),
 ])
-def test_bfs_all_4(shape: tuple[int, ...]) -> None:
+def test_bfs_4(shape: tuple[int, ...]) -> None:
     grid = grid_squares(shape)
     start = grid[0, 0]
     end = grid[shape[0] - 1, shape[1] - 1]
@@ -77,6 +77,26 @@ def test_bfs_all_4(shape: tuple[int, ...]) -> None:
     # bitmap = render_bitmap(grid, maze).astype(int)
     # bitmap2 = render_bitmap(grid, set(solutions[0])).astype(int)
     # print(bitmap + (1 - bitmap2) * 2)
+
+
+def test_bfs_5() -> None:
+    # 0-1-2-3-4-5
+    # | |     | |
+    # 6-7-8-9-1011
+    edges = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5),
+             (6, 7), (7, 8), (8, 9), (9, 10), (10, 11),
+             (0, 6), (1, 7), (4, 10), (5, 11)]
+    maze = frozenset(graph_undirected(edges))
+    sols1 = list(tuple(sol) for sol in solve_bfs_all(maze, 0, 11))
+    assert sorted(sols1) == [
+        (0, 1, 2, 3, 4, 5, 11),
+        (0, 1, 2, 3, 4, 10, 11),
+        (0, 1, 7, 8, 9, 10, 4, 5, 11),
+        (0, 1, 7, 8, 9, 10, 11),
+        (0, 6, 7, 1, 2, 3, 4, 5, 11),
+        (0, 6, 7, 1, 2, 3, 4, 10, 11),
+        (0, 6, 7, 8, 9, 10, 4, 5, 11),
+        (0, 6, 7, 8, 9, 10, 11)]
 
 
 def _assert_sol_perfect(
