@@ -97,6 +97,18 @@ def test_bfs_5() -> None:
         (0, 6, 7, 1, 2, 3, 4, 10, 11),
         (0, 6, 7, 8, 9, 10, 4, 5, 11),
         (0, 6, 7, 8, 9, 10, 11)]
+    sols2 = list(
+        tuple(sol) for sol in solve_bfs_all_shortest(maze, 0, 11))
+    assert sorted(sols2) == [
+        (0, 1, 2, 3, 4, 5, 11),
+        (0, 1, 2, 3, 4, 10, 11),
+        (0, 1, 7, 8, 9, 10, 11),
+        (0, 6, 7, 8, 9, 10, 11)]
+    sol3 = solve_bfs_one_shortest(maze, 0, 11)
+    assert tuple(sol3) in sols2
+    sol4 = solve_dfs_one(maze, 0, 11)
+    assert tuple(sol4) in sols1
+    _assert_sol_perfect(sols1, sols2, tuple(sol3), tuple(sol4))
 
 
 def _assert_sol_perfect(
