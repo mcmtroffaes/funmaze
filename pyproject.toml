@@ -5,7 +5,13 @@ description = "A functional programming interface for generating and solving maz
 readme = "README.rst"
 requires-python = ">=3.10"
 license = { file = "LICENSE.rst" }
-keywords = ["maze", "labyrinth", "puzzle", "functional"]
+keywords = [
+    "maze", "labyrinth", "puzzle", "graph", "tree",
+    "functional", "functional programming", "algorithm",
+    "depth first search", "breadth first search", "shortest path",
+    "backtracking", "backtracker",
+    "wilson", "loop erased random walk", "uniform spanning tree",
+]
 authors = [
     {email = "matthias.troffaes@gmail.com"},
     {name = "Matthias C. M. Troffaes"}
