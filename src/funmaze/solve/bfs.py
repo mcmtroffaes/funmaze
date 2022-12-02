@@ -1,5 +1,5 @@
 from collections import deque
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence, Set
 
 from funmaze.graph import IGraph, Node, graph_neighbours
 
@@ -76,21 +76,10 @@ def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
     return None
 
 
-# https://stackoverflow.com/a/14145564/2863746 "bfs + reverse dfs"
-def solve_bfs_graph_shortest(graph: IGraph[Node], start: Node, end: Node
-                             ) -> IGraph[Node]:
-    """Use a breadth-first-search on the graph to find a subgraph representing
-    all shortest paths between two nodes.
-
-    This implementation does a forward bfs to find the distance from *start*
-    to every other node in the graph until *end* is reached.
-    The result is returned as a graph, such that all paths from *start*
-    to *end* on this graph are the shortest paths.
-    We then do a backward bfs from *end* to return a graph that only contains
-    paths ending in *end*.
-    """
-    neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
-    # find parents
+def _all_shortest_parents(
+        neighbours: Mapping[Node, Sequence[Node]], start: Node, end: Node
+) -> Mapping[Node, Set[Node]]:
+    """Helper function to find parent structure."""
     distances: dict[Node, int] = {start: 0}
     parents: dict[Node, set[Node]] = {start: set()}
     queue: deque[tuple[Node, int]] = deque([(start, 0)])
@@ -104,20 +93,35 @@ def solve_bfs_graph_shortest(graph: IGraph[Node], start: Node, end: Node
                 # ever visited?
                 if node2 not in distances:
                     queue.append((node2, distance2))
-                # set distance if not yet set, set parent if distance correct
+                # set distance if not yet set, add parent if distance correct
                 if distances.setdefault(node2, distance2) == distance2:
                     parents.setdefault(node2, set()).add(node)
-    # if end reached, backtrack to return relevant arcs
+    return parents
+
+
+# https://stackoverflow.com/a/14145564/2863746 "bfs + reverse dfs"
+def solve_bfs_all_shortest(graph: IGraph[Node], start: Node, end: Node
+                           ) -> IGraph[Node]:
+    """Use a breadth-first-search on the graph to find a subgraph representing
+    all shortest paths between two nodes.
+
+    To list the actual paths, use :func:`solve_bfs_paths` on the subgraph.
+
+    This implementation does a forward bfs to find the distance from *start*
+    to every other node in the graph until *end* is reached, followed by
+    a backward bfs from *end* to return a graph that only contains
+    paths ending in *end*.
+    The result is returned as a graph, such that all paths from *start*
+    to *end* on this graph are the shortest paths.
+    """
+    parents = _all_shortest_parents(graph_neighbours(graph), start, end)
     if end in parents:
-        queue2 = deque([end])
+        queue = deque([end])
         visited: set[Node] = {end}
-        while queue2:
-            node2 = queue2.popleft()
-            if node2 == start:
-                return
-            else:
-                for node3 in parents[node2]:
-                    yield node3, node2
-                    if node3 not in visited:
-                        visited.add(node3)
-                        queue2.append(node3)
+        while queue:
+            node = queue.popleft()
+            for node2 in parents[node]:
+                yield node2, node
+                if node2 not in visited:
+                    visited.add(node2)
+                    queue.append(node2)
