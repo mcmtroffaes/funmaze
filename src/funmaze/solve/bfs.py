@@ -6,17 +6,20 @@ from funmaze.graph import IGraph, Node, graph_neighbours
 
 # https://www.geeksforgeeks.org/print-paths-given-source-destination-using-bfs/
 # https://stackoverflow.com/a/64667117/2863746
-def solve_bfs_all(graph: IGraph[Node], start: Node, end: Node
-                  ) -> Iterable[Sequence[Node]]:
+def solve_bfs_paths(graph: IGraph[Node], start: Node, end: Node,
+                    allow_cycles: bool = True,
+                    ) -> Iterable[Sequence[Node]]:
     """Find all paths on the *graph* from *start* to *end*
     by breadth-first-search.
 
+    If your graph has cycles, set *allow_cycles* to ``False`` if you want the
+    iterator not to consider these paths (if you do, the iterator will never
+    stop, because it will keep visiting cycles).
+    Checking for cycles causes some slowing down, so they are allowed by
+    default.
+
     .. warning:: Implementation consumes a lot of memory.
     """
-    # TODO return the graph instead of all paths, this will be much faster
-    #      (smaller queue) and consume a lot less memory (no need to store
-    #      full paths); can then write another function that iterates over all
-    #      paths in a graph from a given node
     neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
     queue: deque[list[Node]] = deque()
     queue.append([start])
@@ -27,7 +30,7 @@ def solve_bfs_all(graph: IGraph[Node], start: Node, end: Node
             yield path
         else:
             for node2 in neighbours[node]:
-                if node2 not in path:
+                if allow_cycles or node2 not in path:
                     queue.append(path + [node2])
 
 
@@ -73,20 +76,48 @@ def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
     return None
 
 
-def solve_bfs_all_shortest(graph: IGraph[Node], start: Node, end: Node
-                           ) -> Iterable[Sequence[Node]]:
-    """Use a breadth-first-search on the graph to find all shortest paths
-    between two nodes.
+# https://stackoverflow.com/a/14145564/2863746 "bfs + reverse dfs"
+def solve_bfs_graph_shortest(graph: IGraph[Node], start: Node, end: Node
+                             ) -> IGraph[Node]:
+    """Use a breadth-first-search on the graph to find a subgraph representing
+    all shortest paths between two nodes.
 
-    .. warning:: Implementation consumes a lot of memory.
+    This implementation does a forward bfs to find the distance from *start*
+    to every other node in the graph until *end* is reached.
+    The result is returned as a graph, such that all paths from *start*
+    to *end* on this graph are the shortest paths.
+    We then do a backward bfs from *end* to return a graph that only contains
+    paths ending in *end*.
     """
-    # TODO return graph instead of set of paths (see TODO in solve_bfs_all)
-    # bfs returns shortest solutions first
-    solution_iter = iter(solve_bfs_all(graph, start, end))
-    solution1 = next(solution_iter, None)
-    if solution1 is not None:
-        yield solution1
-        length = len(solution1)
-        while ((solution2 := next(solution_iter, None)) is not None
-               and len(solution2) == length):
-            yield solution2
+    neighbours: Mapping[Node, Sequence[Node]] = graph_neighbours(graph)
+    # find parents
+    distances: dict[Node, int] = {start: 0}
+    parents: dict[Node, set[Node]] = {start: set()}
+    queue: deque[tuple[Node, int]] = deque([(start, 0)])
+    while queue:
+        node, distance = queue.popleft()
+        if node == end:
+            break
+        else:
+            distance2 = distance + 1
+            for node2 in neighbours[node]:
+                # ever visited?
+                if node2 not in distances:
+                    queue.append((node2, distance2))
+                # set distance if not yet set, set parent if distance correct
+                if distances.setdefault(node2, distance2) == distance2:
+                    parents.setdefault(node2, set()).add(node)
+    # if end reached, backtrack to return relevant arcs
+    if end in parents:
+        queue2 = deque([end])
+        visited: set[Node] = {end}
+        while queue2:
+            node2 = queue2.popleft()
+            if node2 == start:
+                return
+            else:
+                for node3 in parents[node2]:
+                    yield node3, node2
+                    if node3 not in visited:
+                        visited.add(node3)
+                        queue2.append(node3)

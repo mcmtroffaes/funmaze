@@ -1,6 +1,5 @@
 from collections.abc import Sequence
 
-import numpy as np
 import pytest
 
 from funmaze.analyze.bfs import analyze_bfs_branches, analyze_bfs_branches_many
