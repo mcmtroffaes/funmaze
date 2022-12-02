@@ -108,7 +108,7 @@ def test_bfs_5() -> None:
     assert tuple(sol3) in sols2
     sol4 = solve_dfs_one(maze, 0, 11)
     assert tuple(sol4) in sols1
-    _assert_sol_perfect(sols1, sols2, tuple(sol3), tuple(sol4))
+    _assert_sol_imperfect(sols1, sols2, tuple(sol3), tuple(sol4))
 
 
 def _assert_sol_perfect(
