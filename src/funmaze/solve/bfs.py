@@ -76,12 +76,6 @@ def solve_bfs_one_shortest(graph: IGraph[Node], start: Node, end: Node
     return None
 
 
-def _all_shortest_parents(
-        neighbours: Mapping[Node, Sequence[Node]], start: Node, end: Node
-) -> Mapping[Node, Set[Node]]:
-    """Helper function to find parent structure."""
-
-
 # https://stackoverflow.com/a/14145564/2863746 "bfs + reverse dfs"
 def solve_bfs_all_shortest(graph: IGraph[Node], start: Node, end: Node
                            ) -> IGraph[Node]:
@@ -108,6 +102,6 @@ def solve_bfs_all_shortest(graph: IGraph[Node], start: Node, end: Node
                 # ever visited?
                 if node2 not in distances:
                     queue.append((node2, distance2))
-                # set distance if not yet set, add parent if distance correct
+                # set distance if not yet set, return edge if distance correct
                 if distances.setdefault(node2, distance2) == distance2:
                     yield node, node2
